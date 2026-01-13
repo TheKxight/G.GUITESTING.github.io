@@ -3,106 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VG.GUI</title>
+<title>G.GUI Dev Entry</title>
 
 <style>
+:root {
+    --bg: #0b0e14;
+    --panel: rgba(20,25,40,0.85);
+    --accent: #00e0ff;
+    --text: #e6e6e6;
+    --danger: #ff5c5c;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
 body {
     margin: 0;
     height: 100vh;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #121826, #0b0e14);
-    color: white;
+    background: radial-gradient(circle at top, #121826, var(--bg));
+    color: var(--text);
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
+/* ---------- LOCK SCREEN ---------- */
 #lock {
-    background: rgba(20,25,40,0.9);
-    padding: 40px;
-    border-radius: 14px;
+    background: var(--panel);
+    padding: 45px;
+    border-radius: 18px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    animation: fadeIn 1s ease;
+}
+
+#lock h1 {
+    margin-top: 0;
+    letter-spacing: 2px;
 }
 
 #lock input {
-    padding: 12px;
-    width: 200px;
-    border-radius: 8px;
-    border: none;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-#lock button {
     margin-top: 15px;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 12px;
+    width: 220px;
+    border-radius: 10px;
     border: none;
-    cursor: pointer;
-    background: #00e0ff;
+    outline: none;
     font-size: 16px;
-}
-
-#error {
-    color: #ff5c5c;
-    margin-top: 10px;
-    display: none;
-}
-
-#content {
-    display: none;
     text-align: center;
 }
 
-.menu {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-top: 30px;
+#lock button {
+    margin-top: 18px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: var(--accent);
+    color: black;
+    font-size: 16px;
+    transition: transform 0.15s;
 }
 
-.card {
-    background: #151a25;
-    padding: 25px;
-    border-radius: 14px;
-    width: 200px;
+#lock button:hover {
+    transform: scale(1.05);
+}
+
+#error {
+    margin-top: 12px;
+    color: var(--danger);
+    display: none;
+    animation: shake 0.3s;
+}
+
+/* ---------- MAIN CONTENT ---------- */
+#content {
+    display: none;
+    background: var(--panel);
+    padding: 50px 60px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    animation: unlockFade 0.8s ease forwards;
+}
+
+#content h1 {
+    margin-top: 0;
+    letter-spacing: 2px;
+}
+
+.logout {
+    margin-top: 30px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: var(--danger);
     color: white;
-    text-decoration: none;
+    font-size: 15px;
+    transition: transform 0.15s;
+}
+
+.logout:hover {
+    transform: scale(1.05);
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes unlockFade {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
 }
 </style>
 </head>
 
 <body>
 
+<!-- 🔒 LOCK SCREEN -->
 <div id="lock">
-    <h1>VG.GUI</h1>
-    <p>Enter Passcode</p>
-    <input type="password" id="code">
+    <h1>G.GUI Dev Entry</h1>
+    <p>Restricted Access</p>
+    <input type="password" id="code" placeholder="Passcode">
     <br>
-    <button onclick="unlock()">Unlock</button>
-    <div id="error">Wrong passcode</div>
+    <button onclick="unlock()">Enter</button>
+    <div id="error">Invalid passcode</div>
 </div>
 
+<!-- 🔓 MAIN CONTENT -->
 <div id="content">
-    <h1>VG.GUI</h1>
-    <p>Video Game GUI</p>
+    <h1>G.GUI Dev Entry</h1>
+    <p>Developer access granted.</p>
 
-    <div class="menu">
-        <a class="card" href="game1/">🎮 Game 1</a>
-    </div>
+    <button class="logout" onclick="logout()">Logout</button>
 </div>
 
 <script>
-const PASSCODE = "1234"; // change this
+const PASSCODE = "1234"; // 🔑 CHANGE THIS
 
 function unlock() {
-    if (document.getElementById("code").value === PASSCODE) {
+    const input = document.getElementById("code");
+    const error = document.getElementById("error");
+
+    if (input.value === PASSCODE) {
         document.getElementById("lock").style.display = "none";
         document.getElementById("content").style.display = "block";
+        input.value = "";
+        error.style.display = "none";
     } else {
-        document.getElementById("error").style.display = "block";
+        error.style.display = "block";
     }
+}
+
+function logout() {
+    document.getElementById("content").style.display = "none";
+    document.getElementById("lock").style.display = "block";
 }
 </script>
 
