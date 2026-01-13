@@ -8,10 +8,10 @@
 <style>
 :root {
     --bg: #0b0e14;
-    --panel: rgba(20,25,40,0.85);
+    --panel: rgba(20,25,40,0.88);
     --accent: #00e0ff;
-    --text: #e6e6e6;
     --danger: #ff5c5c;
+    --text: #e6e6e6;
 }
 
 * {
@@ -30,26 +30,31 @@ body {
     overflow: hidden;
 }
 
-/* ---------- LOCK SCREEN ---------- */
-#lock {
+/* ---------- TOP BAR ---------- */
+#topbar {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    font-size: 14px;
+    opacity: 0.9;
+    display: none;
+}
+
+/* ---------- LOCK / USERNAME SCREENS ---------- */
+.panel {
     background: var(--panel);
     padding: 45px;
     border-radius: 18px;
     text-align: center;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    animation: fadeIn 1s ease;
+    animation: fadeIn 0.6s ease;
 }
 
-#lock h1 {
-    margin-top: 0;
-    letter-spacing: 2px;
-}
-
-#lock input {
+.panel input {
     margin-top: 15px;
     padding: 12px;
-    width: 220px;
+    width: 230px;
     border-radius: 10px;
     border: none;
     outline: none;
@@ -57,9 +62,9 @@ body {
     text-align: center;
 }
 
-#lock button {
+.panel button {
     margin-top: 18px;
-    padding: 10px 24px;
+    padding: 10px 26px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
@@ -69,7 +74,7 @@ body {
     transition: transform 0.15s;
 }
 
-#lock button:hover {
+.panel button:hover {
     transform: scale(1.05);
 }
 
@@ -84,22 +89,17 @@ body {
 #content {
     display: none;
     background: var(--panel);
-    padding: 50px 60px;
-    border-radius: 20px;
+    padding: 55px 65px;
+    border-radius: 22px;
     text-align: center;
     backdrop-filter: blur(12px);
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    animation: unlockFade 0.8s ease forwards;
-}
-
-#content h1 {
-    margin-top: 0;
-    letter-spacing: 2px;
+    animation: fadeIn 0.6s ease;
 }
 
 .logout {
     margin-top: 30px;
-    padding: 10px 24px;
+    padding: 10px 26px;
     border-radius: 10px;
     border: none;
     cursor: pointer;
@@ -119,11 +119,6 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes unlockFade {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
 @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-4px); }
@@ -136,44 +131,76 @@ body {
 
 <body>
 
-<!-- 🔒 LOCK SCREEN -->
-<div id="lock">
+<!-- TOP RIGHT HELLO -->
+<div id="topbar"></div>
+
+<!-- 🔒 PASSCODE -->
+<div id="lock" class="panel">
     <h1>G.GUI Dev Entry</h1>
-    <p>Restricted Access</p>
-    <input type="password" id="code" placeholder="Passcode">
+    <p>Enter Passcode</p>
+    <input type="password" id="passcode" placeholder="Passcode">
     <br>
-    <button onclick="unlock()">Enter</button>
+    <button onclick="checkPasscode()">Enter</button>
     <div id="error">Invalid passcode</div>
+</div>
+
+<!-- 👤 USERNAME SETUP -->
+<div id="usernameScreen" class="panel" style="display:none;">
+    <h1>Welcome</h1>
+    <p>Enter your username</p>
+    <input type="text" id="usernameInput" placeholder="Username">
+    <br>
+    <button onclick="saveUsername()">Continue</button>
 </div>
 
 <!-- 🔓 MAIN CONTENT -->
 <div id="content">
     <h1>G.GUI Dev Entry</h1>
     <p>Developer access granted.</p>
-
     <button class="logout" onclick="logout()">Logout</button>
 </div>
 
 <script>
-const PASSCODE = "1234"; // 🔑 CHANGE THIS
+const PASSCODE = "1234"; // 🔑 change this
 
-function unlock() {
-    const input = document.getElementById("code");
+function checkPasscode() {
+    const input = document.getElementById("passcode").value;
     const error = document.getElementById("error");
 
-    if (input.value === PASSCODE) {
+    if (input === PASSCODE) {
         document.getElementById("lock").style.display = "none";
-        document.getElementById("content").style.display = "block";
-        input.value = "";
-        error.style.display = "none";
+
+        if (localStorage.getItem("ggui_username")) {
+            showContent();
+        } else {
+            document.getElementById("usernameScreen").style.display = "block";
+        }
     } else {
         error.style.display = "block";
     }
 }
 
+function saveUsername() {
+    const name = document.getElementById("usernameInput").value.trim();
+    if (!name) return;
+
+    localStorage.setItem("ggui_username", name);
+    document.getElementById("usernameScreen").style.display = "none";
+    showContent();
+}
+
+function showContent() {
+    const name = localStorage.getItem("ggui_username");
+    document.getElementById("topbar").textContent = `Hello, ${name}`;
+    document.getElementById("topbar").style.display = "block";
+    document.getElementById("content").style.display = "block";
+}
+
 function logout() {
     document.getElementById("content").style.display = "none";
+    document.getElementById("topbar").style.display = "none";
     document.getElementById("lock").style.display = "block";
+    document.getElementById("passcode").value = "";
 }
 </script>
 
