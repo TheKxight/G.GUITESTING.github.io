@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VG.GUI</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at top, #121826, #0b0e14);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#lock {
+    background: rgba(20,25,40,0.9);
+    padding: 40px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+#lock input {
+    padding: 12px;
+    width: 200px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#lock button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #00e0ff;
+    font-size: 16px;
+}
+
+#error {
+    color: #ff5c5c;
+    margin-top: 10px;
+    display: none;
+}
+
+#content {
+    display: none;
+    text-align: center;
+}
+
+.menu {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card {
+    background: #151a25;
+    padding: 25px;
+    border-radius: 14px;
+    width: 200px;
+    color: white;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="lock">
+    <h1>VG.GUI</h1>
+    <p>Enter Passcode</p>
+    <input type="password" id="code">
+    <br>
+    <button onclick="unlock()">Unlock</button>
+    <div id="error">Wrong passcode</div>
+</div>
+
+<div id="content">
+    <h1>VG.GUI</h1>
+    <p>Video Game GUI</p>
+
+    <div class="menu">
+        <a class="card" href="game1/">🎮 Game 1</a>
+    </div>
+</div>
+
+<script>
+const PASSCODE = "1234"; // change this
+
+function unlock() {
+    if (document.getElementById("code").value === PASSCODE) {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("content").style.display = "block";
+    } else {
+        document.getElementById("error").style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>
