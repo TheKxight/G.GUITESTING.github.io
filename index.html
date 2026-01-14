@@ -6,375 +6,182 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root {
-    --bg: #0b0e14;
-    --panel: rgba(18,22,35,0.92);
-    --accent: #00e0ff;
-    --danger: #ff5c5c;
-    --text: #e6e6e6;
-    --glow: 0 0 12px rgba(0,224,255,0.25);
+:root{
+--bg:#0b0e14;--panel:rgba(18,22,35,.92);--accent:#00e0ff;
+--danger:#ff3b3b;--text:#e6e6e6;--glow:0 0 12px rgba(0,224,255,.25)
 }
+*{box-sizing:border-box;font-family:Segoe UI,Arial}
+body{margin:0;height:100vh;background:radial-gradient(circle at top,#121826,var(--bg));color:var(--text);overflow:hidden}
 
-* {
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+/* SIDEBAR */
+#sidebar{position:fixed;left:0;top:0;height:100%;width:70px;background:#0a0c14;display:none;flex-direction:column;transition:.3s;overflow:hidden}
+#sidebar:hover{width:210px}
+.sidebtn{height:52px;margin:8px;border-radius:12px;background:#0a0c14;border:1px solid rgba(0,224,255,.25);color:var(--accent);
+display:flex;align-items:center;gap:12px;padding-left:14px;cursor:pointer;box-shadow:var(--glow)}
+.sidebtn .icon{width:26px;text-align:center;font-size:18px}
+.sidebtn .label{opacity:0;white-space:nowrap}
+#sidebar:hover .label{opacity:1}
 
-body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at top, #121826, var(--bg));
-    color: var(--text);
-    overflow: hidden;
-}
+/* PANELS */
+.panel{position:fixed;left:90px;top:50%;transform:translateY(-50%);
+width:340px;background:var(--panel);padding:25px;border-radius:16px;display:none}
 
-/* ================= SIDEBAR ================= */
-#sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 70px;
-    background: rgba(10,12,20,0.95);
-    border-right: 1px solid rgba(0,224,255,0.15);
-    display: none;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 20px;
-    overflow: hidden;
-    transition: width 0.3s ease;
-}
+/* BUTTONS */
+.btn{margin-top:10px;padding:10px 22px;border-radius:10px;border:none;cursor:pointer;
+background:var(--accent);color:black;box-shadow:var(--glow)}
+.btn.danger{background:var(--danger);color:white}
 
-#sidebar:hover {
-    width: 210px;
-}
+/* CENTER SCREENS */
+.center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+background:var(--panel);padding:45px;border-radius:18px;text-align:center}
+input,select{padding:12px;width:220px;border-radius:10px;border:none;margin-top:10px}
 
-.sidebtn {
-    width: 100%;
-    height: 52px;
-    margin: 8px 0;
-    border-radius: 12px;
-    background: rgba(10,12,20,0.9);
-    border: 1px solid rgba(0,224,255,0.25);
-    color: var(--accent);
-    cursor: pointer;
-    box-shadow: var(--glow);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding-left: 14px;
-    transition: background 0.25s, box-shadow 0.25s;
-}
+/* TOP BAR */
+#topbar{position:fixed;top:18px;right:30px;display:none}
 
-.sidebtn:hover {
-    background: rgba(15,20,35,0.95);
-    box-shadow: 0 0 16px rgba(0,224,255,0.45);
-}
+/* DEV INFO */
+.info{margin-top:8px;font-size:14px}
 
-/* FIXED ICON WIDTH (ALIGNMENT FIX) */
-.sidebtn .icon {
-    width: 26px;
-    text-align: center;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.sidebtn .label {
-    opacity: 0;
-    transition: opacity 0.25s;
-    font-size: 16px;
-    white-space: nowrap;
-}
-
-#sidebar:hover .sidebtn .label {
-    opacity: 1;
-}
-
-/* ================= TOP BAR ================= */
-#topbar {
-    position: fixed;
-    top: 18px;
-    right: 30px;
-    font-size: 14px;
-    display: none;
-}
-
-/* ================= PANELS ================= */
-.panel {
-    position: fixed;
-    left: 90px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 330px;
-    background: var(--panel);
-    padding: 25px;
-    border-radius: 16px;
-    border: 1px solid rgba(0,224,255,0.25);
-    box-shadow: 0 0 30px rgba(0,0,0,0.6);
-    display: none;
-}
-
-.panel h3 {
-    margin-top: 0;
-    color: var(--accent);
-}
-
-/* ================= BUTTONS ================= */
-.neon-btn {
-    margin-top: 12px;
-    padding: 10px 22px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background: var(--accent);
-    color: black;
-    font-size: 15px;
-    box-shadow: var(--glow);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.neon-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 18px rgba(0,224,255,0.6);
-}
-
-.logout {
-    background: var(--danger);
-    color: white;
-    box-shadow: 0 0 12px rgba(255,92,92,0.4);
-}
-
-.logout:hover {
-    box-shadow: 0 0 18px rgba(255,92,92,0.7);
-}
-
-/* ================= LOCK / USERNAME ================= */
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--panel);
-    padding: 45px;
-    border-radius: 18px;
-    text-align: center;
-    box-shadow: 0 0 35px rgba(0,0,0,0.7);
-}
-
-.center input {
-    margin-top: 15px;
-    padding: 12px;
-    width: 220px;
-    border-radius: 10px;
-    border: none;
-    text-align: center;
-    outline: none;
-}
-
-/* INVALID EFFECT */
-.invalid {
-    animation: wiggle 0.35s;
-    box-shadow: 0 0 14px rgba(255,92,92,0.9);
-}
-
-@keyframes wiggle {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    75% { transform: translateX(-4px); }
-    100% { transform: translateX(0); }
-}
-
-/* ================= MAIN ================= */
-#content {
-    display: none;
-    text-align: center;
-    margin-top: 42vh;
-}
-
-/* ================= LIVE COUNTER ================= */
-#counterWrap {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-#counter {
-    font-size: 18px;
-    color: var(--accent);
-}
-
-/* LIVE DOT */
-#liveDot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #ff3b3b;
-    box-shadow: 0 0 8px rgba(255,59,59,0.8);
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.3; }
-    100% { opacity: 1; }
-}
+/* BAN SCREEN */
+#banScreen{display:none;position:absolute;inset:0;background:black;
+color:red;font-size:30px;align-items:center;justify-content:center;flex-direction:column}
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div id="sidebar">
-    <button class="sidebtn" onclick="toggleSettings()">
-        <span class="icon">⚙</span>
-        <span class="label">Settings</span>
-    </button>
-    <button class="sidebtn" onclick="toggleDev()">
-        <span class="icon">🧰</span>
-        <span class="label">Dev Tools</span>
-    </button>
+<div id="banScreen">
+    <h1>BANNED</h1>
+    <div id="banTimer"></div>
 </div>
 
-<!-- TOP BAR -->
+<div id="sidebar">
+    <div class="sidebtn" onclick="toggleDev()"><span class="icon">🧰</span><span class="label">Dev Tools</span></div>
+</div>
+
 <div id="topbar"></div>
 
-<!-- SETTINGS PANEL -->
-<div id="settingsPanel" class="panel">
-    <h3>Settings</h3>
-    <button class="neon-btn" onclick="changeUsername()">Change Username</button>
-</div>
-
-<!-- DEV TOOLS PANEL -->
+<!-- DEV PANEL -->
 <div id="devPanel" class="panel">
     <h3>Dev Tools</h3>
-    <button class="neon-btn" onclick="showCounter()">Live Counter</button>
-    <div id="counterWrap">
-        <div id="liveDot"></div>
-        <div id="counter"></div>
-    </div>
+    <div class="info" id="rankInfo"></div>
+    <div class="info" id="timeOnline"></div>
+    <div class="info" id="fps"></div>
+    <button class="btn" onclick="showCounter()">Live Counter</button>
+    <div class="info" id="counter"></div>
+    <button class="btn danger" onclick="banAll()" id="banBtn">Ban Everybody (10s)</button>
 </div>
 
-<!-- LOCK -->
+<!-- LOGIN -->
 <div id="lock" class="center">
-    <h1>G.GUI Dev Entry</h1>
-    <input type="password" id="passcode" placeholder="Passcode">
-    <br>
-    <button class="neon-btn" onclick="login()">Enter</button>
+    <h1>G.GUI</h1>
+    <input id="passcode" placeholder="Passcode">
+    <button class="btn" onclick="login()">Enter</button>
+</div>
+
+<!-- RANK -->
+<div id="rankScreen" class="center" style="display:none">
+    <h2>Select Rank</h2>
+    <select id="rankSelect">
+        <option>User</option>
+        <option>Admin</option>
+        <option>Boss</option>
+    </select>
+    <button class="btn" onclick="saveRank()">Continue</button>
 </div>
 
 <!-- USERNAME -->
-<div id="usernameScreen" class="center" style="display:none;">
-    <h1>Set Username</h1>
-    <input id="usernameInput" placeholder="Username">
-    <div id="nameError" style="color:#ff5c5c; margin-top:8px; display:none;">
-        Invalid username
-    </div>
-    <br>
-    <button class="neon-btn" onclick="saveUsername()">Continue</button>
-</div>
-
-<!-- MAIN -->
-<div id="content">
-    <h1>Developer Access Granted</h1>
-    <button class="neon-btn logout" onclick="logout()">Logout</button>
+<div id="userScreen" class="center" style="display:none">
+    <h2>Username</h2>
+    <input id="username">
+    <button class="btn" onclick="saveUser()">Continue</button>
 </div>
 
 <script>
-const PASSCODE = "1234";
-const SESSION_ID = Math.random().toString(36).slice(2);
+const PASS="1234";
+let startTime,fpsFrames=0,lastFPS=performance.now();
 
-/* ---------- LOGIN ---------- */
-function login() {
-    if (passcode.value !== PASSCODE) return;
-
-    lock.style.display = "none";
-
-    if (localStorage.getItem("ggui_user")) {
-        finishLogin();
-    } else {
-        usernameScreen.style.display = "block";
-    }
+/* LOGIN FLOW */
+function login(){
+ if(passcode.value!==PASS)return;
+ lock.style.display="none";
+ if(!localStorage.rank)rankScreen.style.display="block";
+ else if(!localStorage.user)userScreen.style.display="block";
+ else finishLogin();
+}
+function saveRank(){
+ localStorage.rank=rankSelect.value;
+ rankScreen.style.display="none";
+ userScreen.style.display="block";
+}
+function saveUser(){
+ if(!username.value.trim())return;
+ localStorage.user=username.value.trim();
+ userScreen.style.display="none";
+ finishLogin();
+}
+function finishLogin(){
+ sidebar.style.display="flex";
+ topbar.textContent=`Hello ${localStorage.user}`;
+ topbar.style.display="block";
+ rankInfo.textContent=`Rank: ${localStorage.rank}`;
+ startTime=Date.now();
+ if(localStorage.rank!=="Boss")banBtn.style.display="none";
 }
 
-function saveUsername() {
-    const name = usernameInput.value.trim();
-
-    if (!name) {
-        nameError.style.display = "block";
-        usernameInput.classList.add("invalid");
-        setTimeout(() => usernameInput.classList.remove("invalid"), 400);
-        return;
-    }
-
-    nameError.style.display = "none";
-    localStorage.setItem("ggui_user", name);
-    usernameScreen.style.display = "none";
-    finishLogin();
+/* DEV TOOLS */
+function toggleDev(){
+ devPanel.style.display=devPanel.style.display==="block"?"none":"block";
 }
 
-function finishLogin() {
-    topbar.textContent = `Hello, ${localStorage.getItem("ggui_user")}`;
-    topbar.style.display = "block";
-    sidebar.style.display = "flex";
-    content.style.display = "block";
-    startPresence();
+/* TIME ONLINE */
+setInterval(()=>{
+ if(startTime){
+   const s=Math.floor((Date.now()-startTime)/1000);
+   timeOnline.textContent=`Time Online: ${s}s`;
+ }
+},1000);
+
+/* REAL FPS */
+function fpsLoop(){
+ fpsFrames++;
+ const now=performance.now();
+ if(now-lastFPS>=1000){
+   fps.textContent=`FPS: ${fpsFrames}`;
+   fpsFrames=0;
+   lastFPS=now;
+ }
+ requestAnimationFrame(fpsLoop);
+}
+fpsLoop();
+
+/* LIVE COUNTER */
+function showCounter(){
+ counter.textContent=`Users online: ${
+   Object.keys(localStorage).filter(k=>k.startsWith("ggui_online")).length
+ }`;
 }
 
-function logout() {
-    sidebar.style.display = "none";
-    topbar.style.display = "none";
-    content.style.display = "none";
-    settingsPanel.style.display = "none";
-    devPanel.style.display = "none";
-    lock.style.display = "block";
-}
+/* PRESENCE */
+const id=Math.random();
+setInterval(()=>{
+ localStorage["ggui_online"+id]=Date.now();
+},2000);
 
-/* ---------- SIDEBAR ---------- */
-function toggleSettings() {
-    settingsPanel.style.display =
-        settingsPanel.style.display === "block" ? "none" : "block";
-    devPanel.style.display = "none";
+/* BAN SYSTEM */
+function banAll(){
+ if(localStorage.rank!=="Boss")return;
+ const until=Date.now()+10000;
+ localStorage.banUntil=until;
 }
-
-function toggleDev() {
-    devPanel.style.display =
-        devPanel.style.display === "block" ? "none" : "block";
-    settingsPanel.style.display = "none";
-}
-
-function changeUsername() {
-    settingsPanel.style.display = "none";
-    content.style.display = "none";
-    usernameScreen.style.display = "block";
-}
-
-/* ---------- LIVE COUNTER ---------- */
-function startPresence() {
-    setInterval(() => {
-        localStorage.setItem("ggui_online_" + SESSION_ID, Date.now());
-        cleanupPresence();
-    }, 2000);
-}
-
-function cleanupPresence() {
-    const now = Date.now();
-    Object.keys(localStorage).forEach(k => {
-        if (k.startsWith("ggui_online_") && now - localStorage[k] > 5000) {
-            localStorage.removeItem(k);
-        }
-    });
-}
-
-function showCounter() {
-    counterWrap.style.display = "flex";
-    setInterval(() => {
-        const count = Object.keys(localStorage)
-            .filter(k => k.startsWith("ggui_online_")).length;
-        counter.textContent = `Users online: ${count}`;
-    }, 1000);
-}
+setInterval(()=>{
+ if(localStorage.banUntil && Date.now()<localStorage.banUntil){
+   banScreen.style.display="flex";
+   banTimer.textContent=`${Math.ceil((localStorage.banUntil-Date.now())/1000)}s`;
+ }else{
+   banScreen.style.display="none";
+ }
+},500);
 </script>
 
 </body>
