@@ -15,138 +15,60 @@
     --glow: 0 0 12px rgba(0,224,255,0.25);
 }
 
-* {
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
+/* RESET */
+* { box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
+body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121826, var(--bg)); color: var(--text); overflow: hidden; }
 
-body {
-    margin: 0;
-    height: 100vh;
-    background: radial-gradient(circle at top, #121826, var(--bg));
-    color: var(--text);
-    overflow: hidden;
-}
-
-/* ---------- SIDEBAR ---------- */
+/* ------------------ SIDEBAR ------------------ */
 #sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 70px;
+    position: fixed; left: 0; top: 0; height: 100%; width: 70px;
     background: rgba(10,12,20,0.95);
     border-right: 1px solid rgba(0,224,255,0.15);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 20px;
+    display: none; flex-direction: column; align-items: center; padding-top: 20px;
 }
 
 .sidebtn {
-    width: 46px;
-    height: 46px;
-    margin: 10px 0;
-    border-radius: 10px;
-    background: none;
-    border: 1px solid rgba(0,224,255,0.25);
-    color: var(--accent);
-    cursor: pointer;
-    box-shadow: var(--glow);
+    width: 46px; height: 46px; margin: 10px 0; border-radius: 12px;
+    background: rgba(10,12,20,0.9); border: 1px solid rgba(0,224,255,0.25);
+    color: var(--accent); cursor: pointer; box-shadow: var(--glow);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    overflow: hidden;
+    transition: width 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
 }
+.sidebtn .icon { font-size: 18px; min-width: 18px; }
+.sidebtn .label { white-space: nowrap; opacity: 0; transform: translateX(-5px); transition: opacity 0.2s, transform 0.2s; font-size: 14px; }
+.sidebtn:hover { width: 150px; justify-content: flex-start; padding-left: 14px; box-shadow: 0 0 16px rgba(0,224,255,0.45); background: rgba(15,20,35,0.95); }
+.sidebtn:hover .label { opacity: 1; transform: translateX(0); }
 
-/* ---------- TOP BAR ---------- */
-#topbar {
-    position: fixed;
-    top: 18px;
-    right: 30px;
-    font-size: 14px;
-    display: none;
-}
+/* ------------------ TOP BAR ------------------ */
+#topbar { position: fixed; top: 18px; right: 30px; font-size: 14px; display: none; }
 
-/* ---------- PANELS ---------- */
+/* ------------------ PANELS ------------------ */
 .panel {
-    position: fixed;
-    left: 90px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 320px;
-    background: var(--panel);
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    position: fixed; left: 90px; top: 50%; transform: translateY(-50%);
+    width: 320px; background: var(--panel); padding: 25px;
+    border-radius: 16px; box-shadow: 0 0 25px rgba(0,0,0,0.6);
     border: 1px solid rgba(0,224,255,0.25);
     display: none;
 }
+.panel h3 { margin-top: 0; color: var(--accent); }
+.panel button { margin-top: 12px; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; background: var(--accent); color: black; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s; }
+.panel button:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(0,224,255,0.6); background: #00f4ff; }
 
-.panel h3 {
-    margin-top: 0;
-    color: var(--accent);
-}
+/* ------------------ LOCK SCREEN ------------------ */
+.center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         background: var(--panel); padding: 45px; border-radius: 18px; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.7); }
+.center input { margin-top: 15px; padding: 12px; width: 220px; border-radius: 10px; border: none; text-align: center; }
+.center button { margin-top: 18px; padding: 10px 26px; border-radius: 10px; border: none; background: var(--accent); cursor: pointer; color: black; font-size: 16px; transition: transform 0.2s, box-shadow 0.2s; }
+.center button:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(0,224,255,0.6); }
 
-.panel button {
-    margin-top: 12px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    background: var(--accent);
-    color: black;
-}
+/* ------------------ MAIN ------------------ */
+#content { display: none; text-align: center; margin-top: 40vh; }
+.logout { background: var(--danger); color: white; border: none; padding: 10px 24px; border-radius: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.logout:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(255,92,92,0.6); background: #ff6b6b; }
 
-/* ---------- LOCK SCREEN ---------- */
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--panel);
-    padding: 45px;
-    border-radius: 18px;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0,0,0,0.7);
-}
-
-.center input {
-    margin-top: 15px;
-    padding: 12px;
-    width: 220px;
-    border-radius: 10px;
-    border: none;
-    text-align: center;
-}
-
-.center button {
-    margin-top: 18px;
-    padding: 10px 26px;
-    border-radius: 10px;
-    border: none;
-    background: var(--accent);
-    cursor: pointer;
-}
-
-/* ---------- MAIN ---------- */
-#content {
-    display: none;
-    text-align: center;
-    margin-top: 40vh;
-}
-
-.logout {
-    background: var(--danger);
-    color: white;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-/* ---------- LIVE COUNTER ---------- */
-#counter {
-    font-size: 20px;
-    margin-top: 10px;
-    color: var(--accent);
-}
+/* ------------------ LIVE COUNTER ------------------ */
+#counter { font-size: 20px; margin-top: 10px; color: var(--accent); }
 </style>
 </head>
 
@@ -154,8 +76,8 @@ body {
 
 <!-- SIDEBAR -->
 <div id="sidebar">
-    <button class="sidebtn" onclick="toggleSettings()">⚙</button>
-    <button class="sidebtn" onclick="toggleDev()">🧰</button>
+    <button class="sidebtn" onclick="toggleSettings()"><span class="icon">⚙</span><span class="label">Settings</span></button>
+    <button class="sidebtn" onclick="toggleDev()"><span class="icon">🧰</span><span class="label">Dev Tools</span></button>
 </div>
 
 <!-- TOP BAR -->
@@ -164,52 +86,48 @@ body {
 <!-- SETTINGS PANEL -->
 <div id="settingsPanel" class="panel">
     <h3>Settings</h3>
-    <button onclick="changeUsername()">Change Username</button>
+    <button class="neon-btn" onclick="changeUsername()">Change Username</button>
 </div>
 
 <!-- DEV TOOLS PANEL -->
 <div id="devPanel" class="panel">
     <h3>Dev Tools</h3>
-    <button onclick="showCounter()">Live Counter</button>
+    <button class="neon-btn" onclick="showCounter()">Live Counter</button>
     <div id="counter"></div>
 </div>
 
-<!-- LOCK -->
+<!-- LOCK SCREEN -->
 <div id="lock" class="center">
     <h1>G.GUI Dev Entry</h1>
     <input type="password" id="passcode" placeholder="Passcode">
     <br>
-    <button onclick="login()">Enter</button>
+    <button class="neon-btn" onclick="login()">Enter</button>
 </div>
 
-<!-- USERNAME -->
+<!-- USERNAME SCREEN -->
 <div id="usernameScreen" class="center" style="display:none;">
     <h1>Set Username</h1>
     <input id="usernameInput" placeholder="Username">
     <br>
-    <button onclick="saveUsername()">Continue</button>
+    <button class="neon-btn" onclick="saveUsername()">Continue</button>
 </div>
 
-<!-- MAIN -->
+<!-- MAIN CONTENT -->
 <div id="content">
     <h1>Developer Access Granted</h1>
-    <button class="logout" onclick="logout()">Logout</button>
+    <button class="neon-btn logout" onclick="logout()">Logout</button>
 </div>
 
 <script>
 const PASSCODE = "1234";
+const ID = Math.random().toString(36).slice(2);
 
-/* ---------- AUTH ---------- */
+/* ------------------ AUTH ------------------ */
 function login() {
     if (passcode.value !== PASSCODE) return;
-
     lock.style.display = "none";
-
-    if (localStorage.getItem("ggui_user")) {
-        finishLogin();
-    } else {
-        usernameScreen.style.display = "block";
-    }
+    if (localStorage.getItem("ggui_user")) finishLogin();
+    else usernameScreen.style.display = "block";
 }
 
 function saveUsername() {
@@ -236,53 +154,39 @@ function logout() {
     lock.style.display = "block";
 }
 
-/* ---------- SETTINGS ---------- */
+/* ------------------ SIDEBAR ------------------ */
 function toggleSettings() {
-    settingsPanel.style.display =
-        settingsPanel.style.display === "block" ? "none" : "block";
+    settingsPanel.style.display = settingsPanel.style.display==="block"?"none":"block";
     devPanel.style.display = "none";
 }
-
-function changeUsername() {
-    settingsPanel.style.display = "none";
-    content.style.display = "none";
-    usernameScreen.style.display = "block";
-}
-
-/* ---------- DEV TOOLS ---------- */
 function toggleDev() {
-    devPanel.style.display =
-        devPanel.style.display === "block" ? "none" : "block";
+    devPanel.style.display = devPanel.style.display==="block"?"none":"block";
     settingsPanel.style.display = "none";
 }
-
-/* ---------- LIVE COUNTER (SIMULATED) ---------- */
-const ID = Math.random().toString(36).slice(2);
-
-function startPresence() {
-    setInterval(() => {
-        localStorage.setItem("ggui_online_" + ID, Date.now());
-        cleanup();
-    }, 2000);
+function changeUsername() {
+    settingsPanel.style.display="none";
+    content.style.display="none";
+    usernameScreen.style.display="block";
 }
 
-function cleanup() {
-    const now = Date.now();
-    Object.keys(localStorage).forEach(k => {
-        if (k.startsWith("ggui_online_")) {
-            if (now - localStorage.getItem(k) > 5000) {
-                localStorage.removeItem(k);
-            }
-        }
+/* ------------------ LIVE COUNTER ------------------ */
+function startPresence() {
+    setInterval(()=>{
+        localStorage.setItem("ggui_online_"+ID, Date.now());
+        cleanup();
+    },2000);
+}
+function cleanup(){
+    const now=Date.now();
+    Object.keys(localStorage).forEach(k=>{
+        if(k.startsWith("ggui_online_") && now - localStorage.getItem(k) > 5000) localStorage.removeItem(k);
     });
 }
-
-function showCounter() {
-    setInterval(() => {
-        const count = Object.keys(localStorage)
-            .filter(k => k.startsWith("ggui_online_")).length;
+function showCounter(){
+    setInterval(()=>{
+        const count = Object.keys(localStorage).filter(k=>k.startsWith("ggui_online_")).length;
         counter.textContent = `Users online: ${count}`;
-    }, 1000);
+    },1000);
 }
 </script>
 
