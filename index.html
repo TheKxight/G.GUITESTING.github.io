@@ -2,18 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>G.GUI Dev Entry</title>
+<title>G.GUITESTING</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root{
 --bg:#0b0f1a;
---panel:rgba(18,24,40,.95);
+--panel:#12182a;
 --accent:#00e6ff;
---accent-soft:rgba(0,230,255,.25);
 --danger:#ff4b4b;
 --text:#e8f0ff;
---glow:0 0 14px rgba(0,230,255,.35)
+--glow:0 0 18px rgba(0,230,255,.35);
+--border:rgba(0,230,255,.25);
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{
@@ -22,135 +22,155 @@ background:radial-gradient(circle at top,#141c2f,var(--bg));
 color:var(--text);overflow:hidden
 }
 
-/* ================= BOOT ================= */
-#boot{
-position:absolute;inset:0;
-background:black;color:#00e6ff;
-display:none;align-items:center;justify-content:center;
-flex-direction:column;font-family:monospace;
-font-size:18px
-}
-
-/* ================= SIDEBAR ================= */
+/* ===== SIDEBAR ===== */
 #sidebar{
 position:fixed;left:0;top:0;height:100%;
-width:72px;background:rgba(10,14,26,.95);
-border-right:1px solid var(--accent-soft);
+width:72px;background:#0a0f1f;
+border-right:1px solid var(--border);
 display:none;flex-direction:column;
-padding-top:18px;transition:.35s;overflow:hidden
+padding-top:18px;transition:.3s;
 }
 #sidebar:hover{width:220px}
 
 .sidebtn{
-height:54px;margin:8px;border-radius:14px;
-background:linear-gradient(145deg,#0c1222,#0a0f1c);
-border:1px solid var(--accent-soft);
-color:var(--accent);
+height:54px;margin:8px;
+border-radius:14px;
+background:#0c1224;
+border:1px solid var(--border);
 display:flex;align-items:center;
-padding-left:0;cursor:pointer;
-box-shadow:var(--glow);transition:.25s
+cursor:pointer;box-shadow:var(--glow);
+transition:.25s;
 }
+.sidebtn:hover{box-shadow:0 0 28px rgba(0,230,255,.6)}
 
-/* ICON ALWAYS CENTERED */
-.sidebtn .icon{
-width:72px;display:flex;
-justify-content:center;
-align-items:center;
-font-size:18px;
-flex-shrink:0
+.icon{
+width:72px;height:100%;
+display:flex;align-items:center;justify-content:center;
+font-size:18px;flex-shrink:0;
 }
-
-.sidebtn .label{
+.label{
 opacity:0;white-space:nowrap;
-font-size:16px;transition:.25s
+font-size:16px;
+transition:.25s;
 }
-#sidebar:hover .label{
-opacity:1;margin-left:10px
+#sidebar:hover .label{opacity:1}
+
+/* ===== TOP WELCOME ===== */
+#welcome{
+position:fixed;top:20px;right:30px;
+color:var(--accent);
+opacity:0;transition:opacity 1s;
 }
 
-/* ================= TOP BAR ================= */
-#topbar{
-position:fixed;top:20px;right:34px;
-font-size:15px;color:var(--accent)
+/* ===== MAIN ===== */
+#main{
+display:none;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+}
+#title{
+font-size:48px;
+letter-spacing:2px;
+text-shadow:0 0 30px rgba(0,230,255,.4);
 }
 
-/* ================= MODAL OVERLAY ================= */
+/* ===== OVERLAY / MODALS ===== */
 #overlay{
-position:absolute;inset:0;
+position:fixed;inset:0;
 background:rgba(0,0,0,.6);
-display:none;align-items:center;justify-content:center
+display:none;
+align-items:center;
+justify-content:center;
 }
 
-/* ================= PANELS ================= */
 .panel{
-width:380px;background:var(--panel);
-padding:30px;border-radius:20px;
-border:1px solid var(--accent-soft);
-box-shadow:0 0 45px rgba(0,0,0,.8);
-animation:pop .25s ease
+width:380px;
+background:var(--panel);
+padding:30px;
+border-radius:20px;
+border:1px solid var(--border);
+box-shadow:0 0 50px rgba(0,0,0,.8);
+animation:pop .25s ease;
+position:relative;
 }
 @keyframes pop{
 from{transform:scale(.9);opacity:0}
 to{transform:scale(1);opacity:1}
 }
-.panel h3{margin-top:0;color:var(--accent)}
 .close{
 position:absolute;top:14px;right:16px;
-cursor:pointer;font-size:18px
+cursor:pointer;font-size:18px;
 }
 
-/* ================= BUTTONS ================= */
+.panel h3{margin-top:0;color:var(--accent)}
+
 .btn{
-margin-top:12px;padding:12px 26px;
-border-radius:12px;border:none;
-background:var(--accent);color:black;
-font-size:15px;cursor:pointer;
+margin-top:12px;
+padding:12px 26px;
+border-radius:12px;
+border:none;
+background:var(--accent);
+color:black;
+cursor:pointer;
 box-shadow:var(--glow);
-transition:.2s
+transition:.2s;
 }
 .btn:hover{transform:scale(1.06)}
 .btn.danger{
-background:var(--danger);color:white;
-box-shadow:0 0 18px rgba(255,75,75,.5)
+background:var(--danger);
+color:white;
 }
 
-/* ================= CENTER ================= */
-.center{
-position:absolute;top:50%;left:50%;
-transform:translate(-50%,-50%);
-background:var(--panel);padding:48px;
-border-radius:22px;text-align:center;
-box-shadow:0 0 50px rgba(0,0,0,.8)
-}
+/* ===== INPUT ===== */
 input,select{
-padding:14px;width:240px;
-border-radius:12px;border:none;
-margin-top:14px;text-align:center
+width:240px;
+padding:14px;
+border-radius:12px;
+border:none;
+margin-top:12px;
+text-align:center;
+outline:none;
 }
+.invalid{
+animation:shake .35s;
+box-shadow:0 0 14px rgba(255,75,75,.9);
+}
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-4px)}
+50%{transform:translateX(4px)}
+75%{transform:translateX(-4px)}
+100%{transform:translateX(0)}
+}
+.error{color:#ff6b6b;margin-top:8px}
 
-/* ================= INFO ================= */
-.info{margin-top:10px;font-size:14px;opacity:.9}
-
-/* ================= LIVE DOT ================= */
-#liveDot{
+/* ===== DEV ===== */
+.info{margin-top:8px;font-size:14px}
+#live{
+display:flex;align-items:center;gap:6px;
+}
+#dot{
 width:10px;height:10px;border-radius:50%;
-background:#ff3b3b;margin-right:6px;
-box-shadow:0 0 10px red;
-animation:pulse 1s infinite
+background:red;animation:pulse 1s infinite;
 }
 @keyframes pulse{
 0%{opacity:1}50%{opacity:.3}100%{opacity:1}
+}
+
+/* ===== LOGIN ===== */
+#lock{
+position:absolute;inset:0;
+display:flex;align-items:center;justify-content:center;
 }
 </style>
 </head>
 
 <body>
 
-<div id="boot">
-<div>Initializing G.GUI...</div>
-<div>Loading modules...</div>
-<div>Verifying permissions...</div>
-</div>
+<div id="welcome"></div>
 
 <div id="sidebar">
 <div class="sidebtn" onclick="openSettings()">
@@ -161,134 +181,135 @@ animation:pulse 1s infinite
 </div>
 </div>
 
-<div id="topbar"></div>
+<div id="main">
+<div id="title">G.GUITESTING</div>
+<button class="btn danger" onclick="logout()">Logout</button>
+</div>
 
 <div id="overlay">
-<div id="settingsPanel" class="panel" style="display:none">
+<!-- SETTINGS -->
+<div id="settings" class="panel" style="display:none">
 <div class="close" onclick="closePanels()">✖</div>
 <h3>Settings</h3>
-<div class="info" id="rankInfo"></div>
-<button class="btn" onclick="openRankChange()">Change Rank</button>
+<button class="btn" onclick="openUsername()">Change Username</button>
+<button class="btn" onclick="openRank()">Change Rank</button>
 </div>
 
-<div id="devPanel" class="panel" style="display:none">
+<!-- DEV -->
+<div id="dev" class="panel" style="display:none">
 <div class="close" onclick="closePanels()">✖</div>
 <h3>Dev Tools</h3>
-<div class="info" id="timeOnline"></div>
+<div class="info" id="time"></div>
 <div class="info" id="fps"></div>
-<div class="info" style="display:flex;align-items:center">
-<div id="liveDot"></div>
-<div id="counter"></div>
-</div>
-<button class="btn danger" id="banBtn" onclick="banOthers()">Ban Everybody (3s)</button>
-</div>
+<div class="info" id="live"><div id="dot"></div><div id="count"></div></div>
 </div>
 
-<div id="lock" class="center">
-<h1>G.GUI Dev Entry</h1>
-<input id="passcode" placeholder="Passcode">
-<button class="btn" onclick="login()">Enter</button>
+<!-- USER -->
+<div id="userPanel" class="panel" style="display:none">
+<div class="close" onclick="closePanels()">✖</div>
+<h3>Change Username</h3>
+<input id="userInput">
+<div id="userErr" class="error" style="display:none">Invalid username</div>
+<button class="btn" onclick="saveUser()">Save</button>
 </div>
 
-<div id="rankScreen" class="center" style="display:none">
-<h2>Select Rank</h2>
+<!-- RANK -->
+<div id="rankPanel" class="panel" style="display:none">
+<div class="close" onclick="closePanels()">✖</div>
+<h3>Change Rank</h3>
 <select id="rankSelect">
 <option>User</option>
 <option>Admin</option>
 <option>Boss</option>
 </select>
-<button class="btn" onclick="saveRank()">Continue</button>
+<button class="btn" onclick="saveRank()">Save</button>
+</div>
+</div>
+
+<div id="lock">
+<div class="panel">
+<h3>G.GUI Access</h3>
+<input id="pass" placeholder="Passcode">
+<button class="btn" onclick="login()">Enter</button>
+</div>
 </div>
 
 <script>
 const PASS="1234";
-const SESSION=Math.random().toString(36).slice(2);
-let startTime=parseInt(localStorage.totalTime||0),
-lastTick=Date.now(),fpsFrames=0,lastFPS=performance.now();
+let start=parseInt(localStorage.time||0),last=Date.now();
+let frames=0,lastFPS=performance.now();
 
-/* LOGIN */
 function login(){
-if(passcode.value!==PASS)return;
+if(pass.value!==PASS)return;
 lock.style.display="none";
-boot.style.display="flex";
-setTimeout(()=>{
-boot.style.display="none";
-finishLogin();
-},2000);
-}
-function finishLogin(){
 sidebar.style.display="flex";
-topbar.textContent=`Hello, ${localStorage.user||"User"}`;
-rankInfo.textContent=`Rank: ${localStorage.rank||"User"}`;
-updateBanVisibility();
+main.style.display="flex";
+welcome.textContent=`Welcome, ${localStorage.user||"User"}`;
+welcome.style.opacity=1;
+setTimeout(()=>welcome.style.opacity=0,3000);
 }
 
-/* PANELS */
-function openSettings(){
-overlay.style.display="flex";
-settingsPanel.style.display="block";
-devPanel.style.display="none";
+function logout(){
+sidebar.style.display="none";
+main.style.display="none";
+lock.style.display="flex";
 }
-function openDev(){
+
+function openSettings(){open(settings)}
+function openDev(){open(dev)}
+function openUsername(){open(userPanel)}
+function openRank(){open(rankPanel)}
+function open(p){
 overlay.style.display="flex";
-devPanel.style.display="block";
-settingsPanel.style.display="none";
+[p].forEach(x=>x.style.display="block");
 }
 function closePanels(){
 overlay.style.display="none";
-settingsPanel.style.display="none";
-devPanel.style.display="none";
+[settings,dev,userPanel,rankPanel].forEach(p=>p.style.display="none");
 }
 
-/* RANK */
-function openRankChange(){
-overlay.style.display="none";
-rankScreen.style.display="block";
+function saveUser(){
+const v=userInput.value.trim();
+if(!v){
+userInput.classList.add("invalid");
+userErr.style.display="block";
+setTimeout(()=>userInput.classList.remove("invalid"),400);
+return;
 }
+localStorage.user=v;
+closePanels();
+}
+
 function saveRank(){
 localStorage.rank=rankSelect.value;
-rankScreen.style.display="none";
-rankInfo.textContent=`Rank: ${localStorage.rank}`;
-updateBanVisibility();
-}
-function updateBanVisibility(){
-banBtn.style.display=localStorage.rank==="Boss"?"block":"none";
+closePanels();
 }
 
 /* TIME */
 setInterval(()=>{
 const now=Date.now();
-startTime+=now-lastTick;
-lastTick=now;
-localStorage.totalTime=startTime;
-timeOnline.textContent=`Time Online: ${Math.floor(startTime/60000)}m`;
+start+=now-last;last=now;
+localStorage.time=start;
+time.textContent=`Time Online: ${Math.floor(start/60000)}m`;
 },1000);
 
 /* FPS */
-function fpsLoop(){
-fpsFrames++;
+function loop(){
+frames++;
 const now=performance.now();
 if(now-lastFPS>=1000){
-fps.textContent=`FPS: ${fpsFrames}`;
-fpsFrames=0;lastFPS=now;
+fps.textContent=`FPS: ${frames}`;
+frames=0;lastFPS=now;
 }
-requestAnimationFrame(fpsLoop);
+requestAnimationFrame(loop);
 }
-fpsLoop();
+loop();
 
-/* COUNTER */
+/* LIVE */
 setInterval(()=>{
-localStorage["ggui_"+SESSION]=Date.now();
-const online=Object.keys(localStorage)
-.filter(k=>k.startsWith("ggui_")&&Date.now()-localStorage[k]<5000).length;
-counter.textContent=`Users Online: ${online}`;
+localStorage.ping=Date.now();
+count.textContent="Users Online: 1";
 },1000);
-
-/* BAN */
-function banOthers(){
-if(localStorage.rank!=="Boss")return;
-localStorage.banUntil=Date.now()+3000;
-}
 </script>
 
 </body>
