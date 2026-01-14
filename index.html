@@ -22,7 +22,7 @@ background:radial-gradient(circle at top,#141c2f,var(--bg));
 color:var(--text);overflow:hidden
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR */
 #sidebar{
 position:fixed;left:0;top:0;height:100%;
 width:72px;background:rgba(10,14,26,.95);
@@ -45,13 +45,13 @@ transition:.25s
 .sidebtn .label{opacity:0;white-space:nowrap;font-size:16px}
 #sidebar:hover .label{opacity:1}
 
-/* ================= TOP BAR ================= */
+/* TOP BAR */
 #topbar{
 position:fixed;top:20px;right:34px;
 font-size:15px;color:var(--accent)
 }
 
-/* ================= PANELS ================= */
+/* PANELS */
 .panel{
 position:fixed;left:110px;top:50%;
 transform:translateY(-50%);
@@ -63,7 +63,7 @@ display:none
 }
 .panel h3{margin-top:0;color:var(--accent)}
 
-/* ================= BUTTONS ================= */
+/* BUTTONS */
 .btn{
 margin-top:12px;padding:12px 26px;
 border-radius:12px;border:none;
@@ -78,7 +78,7 @@ background:var(--danger);color:white;
 box-shadow:0 0 18px rgba(255,75,75,.5)
 }
 
-/* ================= CENTER SCREENS ================= */
+/* CENTER */
 .center{
 position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
@@ -93,10 +93,24 @@ margin-top:14px;text-align:center;
 outline:none
 }
 
-/* ================= INFO ================= */
+/* INVALID EFFECT */
+.invalid{
+animation:wiggle .35s;
+box-shadow:0 0 14px rgba(255,75,75,.9)
+}
+@keyframes wiggle{
+0%{transform:translateX(0)}
+25%{transform:translateX(-4px)}
+50%{transform:translateX(4px)}
+75%{transform:translateX(-4px)}
+100%{transform:translateX(0)}
+}
+.error{color:#ff6b6b;margin-top:8px}
+
+/* INFO */
 .info{margin-top:10px;font-size:14px;opacity:.9}
 
-/* ================= BAN OVERLAY ================= */
+/* BAN */
 #banScreen{
 display:none;position:absolute;inset:0;
 background:radial-gradient(circle,#200,#000);
@@ -115,12 +129,8 @@ font-size:28px;text-shadow:0 0 20px red
 </div>
 
 <div id="sidebar">
-<div class="sidebtn" onclick="toggleSettings()">
-<span class="icon">⚙</span><span class="label">Settings</span>
-</div>
-<div class="sidebtn" onclick="toggleDev()">
-<span class="icon">🧰</span><span class="label">Dev Tools</span>
-</div>
+<div class="sidebtn" onclick="toggleSettings()"><span class="icon">⚙</span><span class="label">Settings</span></div>
+<div class="sidebtn" onclick="toggleDev()"><span class="icon">🧰</span><span class="label">Dev Tools</span></div>
 </div>
 
 <div id="topbar"></div>
@@ -129,7 +139,9 @@ font-size:28px;text-shadow:0 0 20px red
 <div id="settingsPanel" class="panel">
 <h3>Settings</h3>
 <div class="info" id="rankInfo"></div>
-<button class="btn" onclick="changeUsername()">Change Username</button>
+<button class="btn" onclick="openUsernameChange()">Change Username</button>
+<button class="btn" onclick="openRankChange()">Change Rank</button>
+<div class="info" id="rankCooldown"></div>
 </div>
 
 <!-- DEV TOOLS -->
@@ -149,59 +161,83 @@ font-size:28px;text-shadow:0 0 20px red
 <button class="btn" onclick="login()">Enter</button>
 </div>
 
+<!-- USERNAME -->
+<div id="userScreen" class="center" style="display:none">
+<h2>Change Username</h2>
+<input id="username">
+<div id="nameError" class="error" style="display:none">Invalid username</div>
+<button class="btn" onclick="saveUser()">Save</button>
+</div>
+
 <!-- RANK -->
 <div id="rankScreen" class="center" style="display:none">
-<h2>Select Rank</h2>
+<h2>Change Rank</h2>
 <select id="rankSelect">
 <option>User</option>
 <option>Admin</option>
 <option>Boss</option>
 </select>
-<button class="btn" onclick="saveRank()">Continue</button>
-</div>
-
-<!-- USERNAME -->
-<div id="userScreen" class="center" style="display:none">
-<h2>Choose Username</h2>
-<input id="username">
-<button class="btn" onclick="saveUser()">Continue</button>
+<button class="btn" onclick="saveRank()">Save</button>
 </div>
 
 <script>
 const PASS="1234";
 const SESSION=Math.random().toString(36).slice(2);
-let startTime,fpsFrames=0,lastFPS=performance.now();
+let startTime,lastTick=Date.now(),fpsFrames=0,lastFPS=performance.now();
 
-/* ---------- LOGIN ---------- */
+/* LOGIN */
 function login(){
 if(passcode.value!==PASS)return;
 lock.style.display="none";
-if(!localStorage.rank)rankScreen.style.display="block";
-else if(!localStorage.user)userScreen.style.display="block";
+if(!localStorage.user)userScreen.style.display="block";
 else finishLogin();
-}
-function saveRank(){
-localStorage.rank=rankSelect.value;
-rankScreen.style.display="none";
-userScreen.style.display="block";
-}
-function saveUser(){
-if(!username.value.trim())return;
-localStorage.user=username.value.trim();
-userScreen.style.display="none";
-finishLogin();
 }
 function finishLogin(){
 sidebar.style.display="flex";
 topbar.textContent=`Hello, ${localStorage.user}`;
-rankInfo.textContent=`Rank: ${localStorage.rank}`;
-settingsPanel.style.display="none";
-devPanel.style.display="none";
-startTime=Date.now();
+rankInfo.textContent=`Rank: ${localStorage.rank||"User"}`;
 if(localStorage.rank!=="Boss")banBtn.style.display="none";
+startTime=parseInt(localStorage.totalTime||0);
+lastTick=Date.now();
 }
 
-/* ---------- PANELS ---------- */
+/* USERNAME CHANGE */
+function openUsernameChange(){
+settingsPanel.style.display="none";
+userScreen.style.display="block";
+}
+function saveUser(){
+const v=username.value.trim();
+if(!v){
+nameError.style.display="block";
+username.classList.add("invalid");
+setTimeout(()=>username.classList.remove("invalid"),400);
+return;
+}
+nameError.style.display="none";
+localStorage.user=v;
+userScreen.style.display="none";
+topbar.textContent=`Hello, ${v}`;
+}
+
+/* RANK CHANGE */
+function openRankChange(){
+const cd=localStorage.rankCooldown;
+if(cd && Date.now()<cd){
+rankCooldown.textContent=`Rank change available in ${Math.ceil((cd-Date.now())/3600000)}h`;
+return;
+}
+settingsPanel.style.display="none";
+rankScreen.style.display="block";
+}
+function saveRank(){
+localStorage.rank=rankSelect.value;
+localStorage.rankCooldown=Date.now()+604800000;
+rankScreen.style.display="none";
+rankInfo.textContent=`Rank: ${localStorage.rank}`;
+}
+
+/* PANELS */
 function toggleSettings(){
 settingsPanel.style.display=settingsPanel.style.display==="block"?"none":"block";
 devPanel.style.display="none";
@@ -210,20 +246,18 @@ function toggleDev(){
 devPanel.style.display=devPanel.style.display==="block"?"none":"block";
 settingsPanel.style.display="none";
 }
-function changeUsername(){
-settingsPanel.style.display="none";
-userScreen.style.display="block";
-}
 
-/* ---------- TIME ONLINE ---------- */
+/* TIME ONLINE (PERSISTENT) */
 setInterval(()=>{
-if(startTime){
-const s=Math.floor((Date.now()-startTime)/1000);
-timeOnline.textContent=`Time Online: ${s}s`;
-}
+const now=Date.now();
+const delta=now-lastTick;
+lastTick=now;
+startTime+=delta;
+localStorage.totalTime=startTime;
+timeOnline.textContent=`Time Online: ${Math.floor(startTime/60000)}m`;
 },1000);
 
-/* ---------- REAL FPS ---------- */
+/* FPS */
 function fpsLoop(){
 fpsFrames++;
 const now=performance.now();
@@ -235,19 +269,19 @@ requestAnimationFrame(fpsLoop);
 }
 fpsLoop();
 
-/* ---------- LIVE COUNTER ---------- */
+/* LIVE COUNTER */
 setInterval(()=>{
 localStorage["ggui_"+SESSION]=Date.now();
 const online=Object.keys(localStorage)
-.filter(k=>k.startsWith("ggui_") && Date.now()-localStorage[k]<5000).length;
+.filter(k=>k.startsWith("ggui_")&&Date.now()-localStorage[k]<5000).length;
 counter.textContent=`Users Online: ${online}`;
 },1000);
 
-/* ---------- BAN SYSTEM ---------- */
+/* BAN */
 function banOthers(){
 if(localStorage.rank!=="Boss")return;
-const cooldown=localStorage.banCooldown;
-if(cooldown && Date.now()<cooldown)return;
+const cd=localStorage.banCooldown;
+if(cd && Date.now()<cd)return;
 localStorage.banUntil=Date.now()+3000;
 localStorage.banCooldown=Date.now()+86400000;
 }
@@ -259,9 +293,8 @@ banTimer.textContent=`${Math.ceil((until-Date.now())/1000)}s`;
 }else banScreen.style.display="none";
 
 const cd=localStorage.banCooldown;
-if(cd && Date.now()<cd){
-cooldownInfo.textContent=`Cooldown: ${Math.ceil((cd-Date.now())/3600000)}h`;
-}else cooldownInfo.textContent="";
+cooldownInfo.textContent=cd && Date.now()<cd
+?`Ban cooldown: ${Math.ceil((cd-Date.now())/3600000)}h`:"";
 },500);
 </script>
 
