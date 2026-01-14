@@ -10,16 +10,25 @@
     --bg: #0b0e14;
     --panel: rgba(18,22,35,0.92);
     --accent: #00e0ff;
-    --text: #e6e6e6;
     --danger: #ff5c5c;
+    --text: #e6e6e6;
     --glow: 0 0 12px rgba(0,224,255,0.25);
 }
 
-/* RESET */
-* { box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
-body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121826, var(--bg)); color: var(--text); overflow: hidden; }
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
 
-/* ------------------ SIDEBAR ------------------ */
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #121826, var(--bg));
+    color: var(--text);
+    overflow: hidden;
+}
+
+/* ================= SIDEBAR ================= */
 #sidebar {
     position: fixed;
     left: 0;
@@ -32,20 +41,18 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
     flex-direction: column;
     align-items: flex-start;
     padding-top: 20px;
-    overflow: hidden; 
+    overflow: hidden;
     transition: width 0.3s ease;
 }
 
-/* Expand sidebar on hover */
 #sidebar:hover {
-    width: 200px;
+    width: 210px;
 }
 
-/* Buttons inside sidebar */
 .sidebtn {
     width: 100%;
-    height: 50px;
-    margin: 10px 0;
+    height: 52px;
+    margin: 8px 0;
     border-radius: 12px;
     background: rgba(10,12,20,0.9);
     border: 1px solid rgba(0,224,255,0.25);
@@ -54,16 +61,24 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
     box-shadow: var(--glow);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     gap: 12px;
     padding-left: 14px;
     transition: background 0.25s, box-shadow 0.25s;
 }
 
-/* ICON */
-.sidebtn .icon { font-size: 18px; }
+.sidebtn:hover {
+    background: rgba(15,20,35,0.95);
+    box-shadow: 0 0 16px rgba(0,224,255,0.45);
+}
 
-/* LABEL */
+/* FIXED ICON WIDTH (ALIGNMENT FIX) */
+.sidebtn .icon {
+    width: 26px;
+    text-align: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
 .sidebtn .label {
     opacity: 0;
     transition: opacity 0.25s;
@@ -71,46 +86,140 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
     white-space: nowrap;
 }
 
-/* Show label when sidebar is hovered */
 #sidebar:hover .sidebtn .label {
     opacity: 1;
 }
 
-/* Hover button effect */
-.sidebtn:hover {
-    background: rgba(15,20,35,0.95);
-    box-shadow: 0 0 16px rgba(0,224,255,0.45);
-}
-
-/* ------------------ TOP BAR ------------------ */
-#topbar { position: fixed; top: 18px; right: 30px; font-size: 14px; display: none; }
-
-/* ------------------ PANELS ------------------ */
-.panel {
-    position: fixed; left: 90px; top: 50%; transform: translateY(-50%);
-    width: 320px; background: var(--panel); padding: 25px;
-    border-radius: 16px; box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    border: 1px solid rgba(0,224,255,0.25);
+/* ================= TOP BAR ================= */
+#topbar {
+    position: fixed;
+    top: 18px;
+    right: 30px;
+    font-size: 14px;
     display: none;
 }
-.panel h3 { margin-top: 0; color: var(--accent); }
-.panel button { margin-top: 12px; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; background: var(--accent); color: black; font-size: 14px; transition: transform 0.2s, box-shadow 0.2s; }
-.panel button:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(0,224,255,0.6); background: #00f4ff; }
 
-/* ------------------ LOCK SCREEN ------------------ */
-.center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-         background: var(--panel); padding: 45px; border-radius: 18px; text-align: center; box-shadow: 0 0 30px rgba(0,0,0,0.7); }
-.center input { margin-top: 15px; padding: 12px; width: 220px; border-radius: 10px; border: none; text-align: center; }
-.center button { margin-top: 18px; padding: 10px 26px; border-radius: 10px; border: none; background: var(--accent); cursor: pointer; color: black; font-size: 16px; transition: transform 0.2s, box-shadow 0.2s; }
-.center button:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(0,224,255,0.6); }
+/* ================= PANELS ================= */
+.panel {
+    position: fixed;
+    left: 90px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 330px;
+    background: var(--panel);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(0,224,255,0.25);
+    box-shadow: 0 0 30px rgba(0,0,0,0.6);
+    display: none;
+}
 
-/* ------------------ MAIN ------------------ */
-#content { display: none; text-align: center; margin-top: 40vh; }
-.logout { background: var(--danger); color: white; border: none; padding: 10px 24px; border-radius: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-.logout:hover { transform: scale(1.08); box-shadow: 0 0 18px rgba(255,92,92,0.6); background: #ff6b6b; }
+.panel h3 {
+    margin-top: 0;
+    color: var(--accent);
+}
 
-/* ------------------ LIVE COUNTER ------------------ */
-#counter { font-size: 20px; margin-top: 10px; color: var(--accent); }
+/* ================= BUTTONS ================= */
+.neon-btn {
+    margin-top: 12px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: var(--accent);
+    color: black;
+    font-size: 15px;
+    box-shadow: var(--glow);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.neon-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(0,224,255,0.6);
+}
+
+.logout {
+    background: var(--danger);
+    color: white;
+    box-shadow: 0 0 12px rgba(255,92,92,0.4);
+}
+
+.logout:hover {
+    box-shadow: 0 0 18px rgba(255,92,92,0.7);
+}
+
+/* ================= LOCK / USERNAME ================= */
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--panel);
+    padding: 45px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 0 35px rgba(0,0,0,0.7);
+}
+
+.center input {
+    margin-top: 15px;
+    padding: 12px;
+    width: 220px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    outline: none;
+}
+
+/* INVALID EFFECT */
+.invalid {
+    animation: wiggle 0.35s;
+    box-shadow: 0 0 14px rgba(255,92,92,0.9);
+}
+
+@keyframes wiggle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+/* ================= MAIN ================= */
+#content {
+    display: none;
+    text-align: center;
+    margin-top: 42vh;
+}
+
+/* ================= LIVE COUNTER ================= */
+#counterWrap {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+#counter {
+    font-size: 18px;
+    color: var(--accent);
+}
+
+/* LIVE DOT */
+#liveDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff3b3b;
+    box-shadow: 0 0 8px rgba(255,59,59,0.8);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
 </style>
 </head>
 
@@ -118,8 +227,14 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
 
 <!-- SIDEBAR -->
 <div id="sidebar">
-    <button class="sidebtn" onclick="toggleSettings()"><span class="icon">⚙</span><span class="label">Settings</span></button>
-    <button class="sidebtn" onclick="toggleDev()"><span class="icon">🧰</span><span class="label">Dev Tools</span></button>
+    <button class="sidebtn" onclick="toggleSettings()">
+        <span class="icon">⚙</span>
+        <span class="label">Settings</span>
+    </button>
+    <button class="sidebtn" onclick="toggleDev()">
+        <span class="icon">🧰</span>
+        <span class="label">Dev Tools</span>
+    </button>
 </div>
 
 <!-- TOP BAR -->
@@ -135,10 +250,13 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
 <div id="devPanel" class="panel">
     <h3>Dev Tools</h3>
     <button class="neon-btn" onclick="showCounter()">Live Counter</button>
-    <div id="counter"></div>
+    <div id="counterWrap">
+        <div id="liveDot"></div>
+        <div id="counter"></div>
+    </div>
 </div>
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div id="lock" class="center">
     <h1>G.GUI Dev Entry</h1>
     <input type="password" id="passcode" placeholder="Passcode">
@@ -146,15 +264,18 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
     <button class="neon-btn" onclick="login()">Enter</button>
 </div>
 
-<!-- USERNAME SCREEN -->
+<!-- USERNAME -->
 <div id="usernameScreen" class="center" style="display:none;">
     <h1>Set Username</h1>
     <input id="usernameInput" placeholder="Username">
+    <div id="nameError" style="color:#ff5c5c; margin-top:8px; display:none;">
+        Invalid username
+    </div>
     <br>
     <button class="neon-btn" onclick="saveUsername()">Continue</button>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div id="content">
     <h1>Developer Access Granted</h1>
     <button class="neon-btn logout" onclick="logout()">Logout</button>
@@ -162,25 +283,39 @@ body { margin: 0; height: 100vh; background: radial-gradient(circle at top, #121
 
 <script>
 const PASSCODE = "1234";
-const ID = Math.random().toString(36).slice(2);
+const SESSION_ID = Math.random().toString(36).slice(2);
 
-/* ------------------ AUTH ------------------ */
+/* ---------- LOGIN ---------- */
 function login() {
     if (passcode.value !== PASSCODE) return;
+
     lock.style.display = "none";
-    if (localStorage.getItem("ggui_user")) finishLogin();
-    else usernameScreen.style.display = "block";
+
+    if (localStorage.getItem("ggui_user")) {
+        finishLogin();
+    } else {
+        usernameScreen.style.display = "block";
+    }
 }
 
 function saveUsername() {
-    localStorage.setItem("ggui_user", usernameInput.value.trim());
+    const name = usernameInput.value.trim();
+
+    if (!name) {
+        nameError.style.display = "block";
+        usernameInput.classList.add("invalid");
+        setTimeout(() => usernameInput.classList.remove("invalid"), 400);
+        return;
+    }
+
+    nameError.style.display = "none";
+    localStorage.setItem("ggui_user", name);
     usernameScreen.style.display = "none";
     finishLogin();
 }
 
 function finishLogin() {
-    const name = localStorage.getItem("ggui_user");
-    topbar.textContent = `Hello, ${name}`;
+    topbar.textContent = `Hello, ${localStorage.getItem("ggui_user")}`;
     topbar.style.display = "block";
     sidebar.style.display = "flex";
     content.style.display = "block";
@@ -188,47 +323,57 @@ function finishLogin() {
 }
 
 function logout() {
-    content.style.display = "none";
     sidebar.style.display = "none";
     topbar.style.display = "none";
+    content.style.display = "none";
     settingsPanel.style.display = "none";
     devPanel.style.display = "none";
     lock.style.display = "block";
 }
 
-/* ------------------ SIDEBAR ------------------ */
+/* ---------- SIDEBAR ---------- */
 function toggleSettings() {
-    settingsPanel.style.display = settingsPanel.style.display==="block"?"none":"block";
+    settingsPanel.style.display =
+        settingsPanel.style.display === "block" ? "none" : "block";
     devPanel.style.display = "none";
 }
+
 function toggleDev() {
-    devPanel.style.display = devPanel.style.display==="block"?"none":"block";
+    devPanel.style.display =
+        devPanel.style.display === "block" ? "none" : "block";
     settingsPanel.style.display = "none";
 }
+
 function changeUsername() {
-    settingsPanel.style.display="none";
-    content.style.display="none";
-    usernameScreen.style.display="block";
+    settingsPanel.style.display = "none";
+    content.style.display = "none";
+    usernameScreen.style.display = "block";
 }
 
-/* ------------------ LIVE COUNTER ------------------ */
+/* ---------- LIVE COUNTER ---------- */
 function startPresence() {
-    setInterval(()=>{
-        localStorage.setItem("ggui_online_"+ID, Date.now());
-        cleanup();
-    },2000);
+    setInterval(() => {
+        localStorage.setItem("ggui_online_" + SESSION_ID, Date.now());
+        cleanupPresence();
+    }, 2000);
 }
-function cleanup(){
-    const now=Date.now();
-    Object.keys(localStorage).forEach(k=>{
-        if(k.startsWith("ggui_online_") && now - localStorage.getItem(k) > 5000) localStorage.removeItem(k);
+
+function cleanupPresence() {
+    const now = Date.now();
+    Object.keys(localStorage).forEach(k => {
+        if (k.startsWith("ggui_online_") && now - localStorage[k] > 5000) {
+            localStorage.removeItem(k);
+        }
     });
 }
-function showCounter(){
-    setInterval(()=>{
-        const count = Object.keys(localStorage).filter(k=>k.startsWith("ggui_online_")).length;
+
+function showCounter() {
+    counterWrap.style.display = "flex";
+    setInterval(() => {
+        const count = Object.keys(localStorage)
+            .filter(k => k.startsWith("ggui_online_")).length;
         counter.textContent = `Users online: ${count}`;
-    },1000);
+    }, 1000);
 }
 </script>
 
