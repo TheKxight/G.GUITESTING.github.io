@@ -12,8 +12,8 @@
 --accent:#00e6ff;
 --danger:#ff4b4b;
 --text:#e8f0ff;
---glow:0 0 18px rgba(0,230,255,.35);
 --border:rgba(0,230,255,.25);
+--glow:0 0 18px rgba(0,230,255,.35);
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
 body{
@@ -21,62 +21,6 @@ margin:0;height:100vh;
 background:radial-gradient(circle at top,#141c2f,var(--bg));
 color:var(--text);overflow:hidden
 }
-/* ===== SETTINGS (MOBILE STYLE) ===== */
-.settings-panel{
-  background:#f6f7fb;
-  color:#111;
-}
-
-.settings-title{
-  margin:0 0 18px 0;
-  font-size:22px;
-  text-align:center;
-  color:#111;
-}
-
-.settings-list{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-
-.settings-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:14px 16px;
-  background:#ffffff;
-  border-radius:14px;
-  cursor:pointer;
-  transition:.2s;
-  border:1px solid #e3e6ef;
-}
-
-.settings-item:hover{
-  background:#eef1ff;
-  transform:scale(1.01);
-}
-
-.settings-left{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.settings-icon{
-  font-size:18px;
-}
-
-.settings-text{
-  font-size:16px;
-  font-weight:500;
-}
-
-.settings-arrow{
-  font-size:22px;
-  color:#999;
-}
-
 
 /* ===== SIDEBAR ===== */
 #sidebar{
@@ -97,21 +41,24 @@ display:flex;align-items:center;
 cursor:pointer;box-shadow:var(--glow);
 transition:.25s;
 }
-.sidebtn:hover{box-shadow:0 0 28px rgba(0,230,255,.6)}
+.sidebtn:hover{box-shadow:0 0 26px rgba(0,230,255,.6)}
 
 .icon{
-width:72px;height:100%;
-display:flex;align-items:center;justify-content:center;
-font-size:18px;flex-shrink:0;
+width:64px;
+display:flex;align-items:center;
+justify-content:center;
+font-size:18px;
+flex-shrink:0;
 }
 .label{
-opacity:0;white-space:nowrap;
+opacity:0;
+white-space:nowrap;
 font-size:16px;
 transition:.25s;
 }
 #sidebar:hover .label{opacity:1}
 
-/* ===== TOP WELCOME ===== */
+/* ===== WELCOME ===== */
 #welcome{
 position:fixed;top:20px;right:30px;
 color:var(--accent);
@@ -126,6 +73,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 flex-direction:column;
+gap:18px;
 }
 #title{
 font-size:48px;
@@ -133,7 +81,7 @@ letter-spacing:2px;
 text-shadow:0 0 30px rgba(0,230,255,.4);
 }
 
-/* ===== OVERLAY / MODALS ===== */
+/* ===== OVERLAY ===== */
 #overlay{
 position:fixed;inset:0;
 background:rgba(0,0,0,.6);
@@ -142,27 +90,73 @@ align-items:center;
 justify-content:center;
 }
 
+/* ===== PANELS ===== */
 .panel{
 width:380px;
-background:var(--panel);
-padding:30px;
+background:#f6f7fb;
+color:#111;
+padding:28px;
 border-radius:20px;
-border:1px solid var(--border);
 box-shadow:0 0 50px rgba(0,0,0,.8);
-animation:pop .25s ease;
 position:relative;
+animation:pop .25s ease;
 }
 @keyframes pop{
-from{transform:scale(.9);opacity:0}
+from{transform:scale(.92);opacity:0}
 to{transform:scale(1);opacity:1}
 }
 .close{
-position:absolute;top:14px;right:16px;
-cursor:pointer;font-size:18px;
+position:absolute;
+top:14px;
+right:16px;
+cursor:pointer;
+font-size:18px;
 }
 
-.panel h3{margin-top:0;color:var(--accent)}
+.panel h3{
+margin:0 0 18px 0;
+text-align:center;
+}
 
+/* ===== SETTINGS / DEV LIST ===== */
+.settings-list{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+.settings-item{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:14px 16px;
+background:white;
+border-radius:14px;
+cursor:pointer;
+transition:.2s;
+border:1px solid #e3e6ef;
+}
+.settings-item:hover{
+background:#eef1ff;
+transform:scale(1.01);
+}
+.settings-left{
+display:flex;
+align-items:center;
+gap:12px;
+}
+.settings-icon{font-size:18px}
+.settings-text{font-size:16px;font-weight:500}
+.settings-arrow{font-size:22px;color:#999}
+
+/* ===== INNER CONTENT ===== */
+.inner-panel{
+display:none;
+margin-top:16px;
+padding-top:14px;
+border-top:1px solid #ddd;
+}
+
+/* ===== BUTTONS ===== */
 .btn{
 margin-top:12px;
 padding:12px 26px;
@@ -174,7 +168,7 @@ cursor:pointer;
 box-shadow:var(--glow);
 transition:.2s;
 }
-.btn:hover{transform:scale(1.06)}
+.btn:hover{transform:scale(1.05)}
 .btn.danger{
 background:var(--danger);
 color:white;
@@ -182,13 +176,12 @@ color:white;
 
 /* ===== INPUT ===== */
 input,select{
-width:240px;
+width:100%;
 padding:14px;
 border-radius:12px;
 border:none;
 margin-top:12px;
 text-align:center;
-outline:none;
 }
 .invalid{
 animation:shake .35s;
@@ -201,25 +194,39 @@ box-shadow:0 0 14px rgba(255,75,75,.9);
 75%{transform:translateX(-4px)}
 100%{transform:translateX(0)}
 }
-.error{color:#ff6b6b;margin-top:8px}
+.error{
+color:#ff4b4b;
+margin-top:8px;
+text-align:center;
+}
 
 /* ===== DEV ===== */
-.info{margin-top:8px;font-size:14px}
+.info{margin-top:8px}
 #live{
-display:flex;align-items:center;gap:6px;
+display:flex;
+align-items:center;
+gap:6px;
 }
 #dot{
-width:10px;height:10px;border-radius:50%;
-background:red;animation:pulse 1s infinite;
+width:10px;
+height:10px;
+border-radius:50%;
+background:red;
+animation:pulse 1s infinite;
 }
 @keyframes pulse{
-0%{opacity:1}50%{opacity:.3}100%{opacity:1}
+0%{opacity:1}
+50%{opacity:.3}
+100%{opacity:1}
 }
 
 /* ===== LOGIN ===== */
 #lock{
-position:absolute;inset:0;
-display:flex;align-items:center;justify-content:center;
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 </style>
 </head>
@@ -243,82 +250,71 @@ display:flex;align-items:center;justify-content:center;
 </div>
 
 <div id="overlay">
-<!-- SETTINGS PANEL -->
-<div id="settings" class="panel settings-panel" style="display:none">
-  <div class="close" onclick="closePanels()">✖</div>
-  <h3 class="settings-title">Settings</h3>
 
-  <div class="settings-list">
+<!-- SETTINGS -->
+<div id="settings" class="panel" style="display:none">
+<div class="close" onclick="closePanels()">✖</div>
+<h3>Settings</h3>
 
-    <div class="settings-item" onclick="openUsername()">
-      <div class="settings-left">
-        <span class="settings-icon">👤</span>
-        <span class="settings-text">Account</span>
-      </div>
-      <span class="settings-arrow">›</span>
-    </div>
-
-    <div class="settings-item" onclick="openRank()">
-      <div class="settings-left">
-        <span class="settings-icon">🛡</span>
-        <span class="settings-text">Rank & Permissions</span>
-      </div>
-      <span class="settings-arrow">›</span>
-    </div>
-
-    <div class="settings-item">
-      <div class="settings-left">
-        <span class="settings-icon">🔔</span>
-        <span class="settings-text">Notifications</span>
-      </div>
-      <span class="settings-arrow">›</span>
-    </div>
-
-    <div class="settings-item">
-      <div class="settings-left">
-        <span class="settings-icon">ℹ️</span>
-        <span class="settings-text">About</span>
-      </div>
-      <span class="settings-arrow">›</span>
-    </div>
-
-  </div>
+<div class="settings-list">
+<div class="settings-item" onclick="showSettings('account')">
+<div class="settings-left"><span class="settings-icon">👤</span><span class="settings-text">Account</span></div>
+<span class="settings-arrow">›</span>
+</div>
+<div class="settings-item" onclick="showSettings('rank')">
+<div class="settings-left"><span class="settings-icon">🛡</span><span class="settings-text">Rank & Permissions</span></div>
+<span class="settings-arrow">›</span>
+</div>
 </div>
 
-
-<!-- DEV -->
-<div id="dev" class="panel" style="display:none">
-<div class="close" onclick="closePanels()">✖</div>
-<h3>Dev Tools</h3>
-<div class="info" id="time"></div>
-<div class="info" id="fps"></div>
-<div class="info" id="live"><div id="dot"></div><div id="count"></div></div>
-</div>
-
-<!-- USER -->
-<div id="userPanel" class="panel" style="display:none">
-<div class="close" onclick="closePanels()">✖</div>
-<h3>Change Username</h3>
-<input id="userInput">
+<div id="account" class="inner-panel">
+<input id="usernameInput" placeholder="New username">
 <div id="userErr" class="error" style="display:none">Invalid username</div>
-<button class="btn" onclick="saveUser()">Save</button>
+<button class="btn" onclick="saveUsername()">Save</button>
 </div>
 
-<!-- RANK -->
-<div id="rankPanel" class="panel" style="display:none">
-<div class="close" onclick="closePanels()">✖</div>
-<h3>Change Rank</h3>
+<div id="rank" class="inner-panel">
 <select id="rankSelect">
 <option>User</option>
 <option>Admin</option>
 <option>Boss</option>
 </select>
-<button class="btn" onclick="saveRank()">Save</button>
+<button class="btn" onclick="saveRank()">Save Rank</button>
 </div>
 </div>
 
+<!-- DEV TOOLS -->
+<div id="dev" class="panel" style="display:none">
+<div class="close" onclick="closePanels()">✖</div>
+<h3>Dev Tools</h3>
+
+<div class="settings-list">
+<div class="settings-item" onclick="showDev('stats')">
+<div class="settings-left"><span class="settings-icon">📊</span><span class="settings-text">Live Stats</span></div>
+<span class="settings-arrow">›</span>
+</div>
+<div class="settings-item" onclick="showDev('moderation')">
+<div class="settings-left"><span class="settings-icon">🚫</span><span class="settings-text">Moderation</span></div>
+<span class="settings-arrow">›</span>
+</div>
+</div>
+
+<div id="stats" class="inner-panel">
+<div class="info" id="time"></div>
+<div class="info" id="fps"></div>
+<div class="info" id="live"><div id="dot"></div><div id="count"></div></div>
+</div>
+
+<div id="moderation" class="inner-panel">
+<button class="btn danger" id="banBtn">Ban Everybody (3s)</button>
+</div>
+</div>
+
+</div>
+
+<!-- LOGIN -->
 <div id="lock">
-<div class="panel">
+<div class="panel" style="background:#12182a;color:white">
 <h3>G.GUI Access</h3>
 <input id="pass" placeholder="Passcode">
 <button class="btn" onclick="login()">Enter</button>
@@ -327,7 +323,8 @@ display:flex;align-items:center;justify-content:center;
 
 <script>
 const PASS="1234";
-let start=parseInt(localStorage.time||0),last=Date.now();
+let timeOnline=parseInt(localStorage.time||0);
+let last=Date.now();
 let frames=0,lastFPS=performance.now();
 
 function login(){
@@ -346,59 +343,77 @@ main.style.display="none";
 lock.style.display="flex";
 }
 
-function openSettings(){open(settings)}
-function openDev(){open(dev)}
-function openUsername(){open(userPanel)}
-function openRank(){open(rankPanel)}
-function open(p){
+function openSettings(){openPanel(settings)}
+function openDev(){openPanel(dev)}
+function openPanel(p){
 overlay.style.display="flex";
-[p].forEach(x=>x.style.display="block");
+settings.style.display="none";
+dev.style.display="none";
+p.style.display="block";
+hideInner();
 }
 function closePanels(){
 overlay.style.display="none";
-[settings,dev,userPanel,rankPanel].forEach(p=>p.style.display="none");
+settings.style.display="none";
+dev.style.display="none";
+hideInner();
 }
 
-function saveUser(){
-const v=userInput.value.trim();
+function hideInner(){
+document.querySelectorAll('.inner-panel').forEach(p=>p.style.display="none");
+}
+
+function showSettings(id){
+hideInner();
+document.getElementById(id).style.display="block";
+}
+function showDev(id){
+hideInner();
+document.getElementById(id).style.display="block";
+}
+
+function saveUsername(){
+const v=usernameInput.value.trim();
 if(!v){
-userInput.classList.add("invalid");
+usernameInput.classList.add("invalid");
 userErr.style.display="block";
-setTimeout(()=>userInput.classList.remove("invalid"),400);
+setTimeout(()=>usernameInput.classList.remove("invalid"),400);
 return;
 }
 localStorage.user=v;
+userErr.style.display="none";
 closePanels();
 }
 
 function saveRank(){
 localStorage.rank=rankSelect.value;
+banBtn.style.display=localStorage.rank==="Boss"?"block":"none";
 closePanels();
 }
 
 /* TIME */
 setInterval(()=>{
 const now=Date.now();
-start+=now-last;last=now;
-localStorage.time=start;
-time.textContent=`Time Online: ${Math.floor(start/60000)}m`;
+timeOnline+=now-last;
+last=now;
+localStorage.time=timeOnline;
+time.textContent=`Time Online: ${Math.floor(timeOnline/60000)}m`;
 },1000);
 
 /* FPS */
-function loop(){
+function fpsLoop(){
 frames++;
 const now=performance.now();
 if(now-lastFPS>=1000){
 fps.textContent=`FPS: ${frames}`;
 frames=0;lastFPS=now;
 }
-requestAnimationFrame(loop);
+requestAnimationFrame(fpsLoop);
 }
-loop();
+fpsLoop();
 
-/* LIVE */
+/* LIVE COUNTER */
 setInterval(()=>{
-localStorage.ping=Date.now();
 count.textContent="Users Online: 1";
 },1000);
 </script>
