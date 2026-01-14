@@ -21,6 +21,62 @@ margin:0;height:100vh;
 background:radial-gradient(circle at top,#141c2f,var(--bg));
 color:var(--text);overflow:hidden
 }
+/* ===== SETTINGS (MOBILE STYLE) ===== */
+.settings-panel{
+  background:#f6f7fb;
+  color:#111;
+}
+
+.settings-title{
+  margin:0 0 18px 0;
+  font-size:22px;
+  text-align:center;
+  color:#111;
+}
+
+.settings-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.settings-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  background:#ffffff;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.2s;
+  border:1px solid #e3e6ef;
+}
+
+.settings-item:hover{
+  background:#eef1ff;
+  transform:scale(1.01);
+}
+
+.settings-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.settings-icon{
+  font-size:18px;
+}
+
+.settings-text{
+  font-size:16px;
+  font-weight:500;
+}
+
+.settings-arrow{
+  font-size:22px;
+  color:#999;
+}
+
 
 /* ===== SIDEBAR ===== */
 #sidebar{
@@ -187,13 +243,48 @@ display:flex;align-items:center;justify-content:center;
 </div>
 
 <div id="overlay">
-<!-- SETTINGS -->
-<div id="settings" class="panel" style="display:none">
-<div class="close" onclick="closePanels()">✖</div>
-<h3>Settings</h3>
-<button class="btn" onclick="openUsername()">Change Username</button>
-<button class="btn" onclick="openRank()">Change Rank</button>
+<!-- SETTINGS PANEL -->
+<div id="settings" class="panel settings-panel" style="display:none">
+  <div class="close" onclick="closePanels()">✖</div>
+  <h3 class="settings-title">Settings</h3>
+
+  <div class="settings-list">
+
+    <div class="settings-item" onclick="openUsername()">
+      <div class="settings-left">
+        <span class="settings-icon">👤</span>
+        <span class="settings-text">Account</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item" onclick="openRank()">
+      <div class="settings-left">
+        <span class="settings-icon">🛡</span>
+        <span class="settings-text">Rank & Permissions</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+      <div class="settings-left">
+        <span class="settings-icon">🔔</span>
+        <span class="settings-text">Notifications</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </div>
+
+    <div class="settings-item">
+      <div class="settings-left">
+        <span class="settings-icon">ℹ️</span>
+        <span class="settings-text">About</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </div>
+
+  </div>
 </div>
+
 
 <!-- DEV -->
 <div id="dev" class="panel" style="display:none">
