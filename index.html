@@ -8,7 +8,7 @@
 <style>
 :root {
     --bg: #0b0e14;
-    --panel: rgba(20,25,40,0.88);
+    --panel: rgba(20,25,40,0.9);
     --accent: #00e0ff;
     --danger: #ff5c5c;
     --text: #e6e6e6;
@@ -33,10 +33,27 @@ body {
 /* ---------- TOP BAR ---------- */
 #topbar {
     position: fixed;
-    top: 20px;
+    top: 18px;
     right: 30px;
     font-size: 14px;
-    opacity: 0.9;
+    display: none;
+}
+
+/* ---------- SETTINGS BAR ---------- */
+#settings {
+    position: fixed;
+    top: 18px;
+    left: 30px;
+    display: none;
+}
+
+#settings button {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 6px 14px;
+    cursor: pointer;
 }
 
 /* ---------- PANELS ---------- */
@@ -56,7 +73,6 @@ body {
     width: 230px;
     border-radius: 10px;
     border: none;
-    outline: none;
     font-size: 16px;
     text-align: center;
 }
@@ -70,18 +86,12 @@ body {
     background: var(--accent);
     color: black;
     font-size: 16px;
-    transition: transform 0.15s;
-}
-
-.panel button:hover {
-    transform: scale(1.05);
 }
 
 #error {
     margin-top: 12px;
     color: var(--danger);
     display: none;
-    animation: shake 0.3s;
 }
 
 /* ---------- MAIN CONTENT ---------- */
@@ -91,45 +101,62 @@ body {
     padding: 55px 65px;
     border-radius: 22px;
     text-align: center;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
 }
 
 .logout {
     margin-top: 30px;
-    padding: 10px 26px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
     background: var(--danger);
     color: white;
-    font-size: 15px;
-    transition: transform 0.15s;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.logout:hover {
-    transform: scale(1.05);
+/* ---------- DEV TOOLS ---------- */
+#devtools {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 300px;
+    height: 220px;
+    background: rgba(10,12,20,0.95);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 12px;
+    display: none;
+    font-size: 13px;
 }
 
-/* ---------- ANIMATIONS ---------- */
+#devtools h3 {
+    margin-top: 0;
+    font-size: 14px;
+    color: var(--accent);
+}
+
+#devtools button {
+    background: none;
+    color: var(--accent);
+    border: none;
+    cursor: pointer;
+}
+
+/* ---------- ANIMATION ---------- */
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-4px); }
-    50% { transform: translateX(4px); }
-    75% { transform: translateX(-4px); }
-    100% { transform: translateX(0); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- TOP RIGHT HELLO -->
+<!-- TOP UI -->
+<div id="settings">
+    <button onclick="changeUsername()">Change Username</button>
+    <button onclick="toggleDevTools()">Dev Tools</button>
+</div>
+
 <div id="topbar"></div>
 
 <!-- 🔒 PASSCODE -->
@@ -142,70 +169,81 @@ body {
     <div id="error">Invalid passcode</div>
 </div>
 
-<!-- 👤 USERNAME SETUP -->
+<!-- 👤 USERNAME -->
 <div id="usernameScreen" class="panel" style="display:none;">
-    <h1>Welcome</h1>
-    <p>Enter your username</p>
+    <h1>Set Username</h1>
     <input type="text" id="usernameInput" placeholder="Username">
     <br>
     <button onclick="saveUsername()">Continue</button>
 </div>
 
-<!-- 🔓 MAIN CONTENT -->
+<!-- 🔓 MAIN -->
 <div id="content">
-    <h1>G.GUI Dev Entry</h1>
-    <p>Developer access granted.</p>
+    <h1>Developer Console</h1>
+    <p>Access level: Administrator</p>
     <button class="logout" onclick="logout()">Logout</button>
 </div>
 
+<!-- 🧰 DEV TOOLS -->
+<div id="devtools">
+    <h3>Fake Dev Tools</h3>
+    <p>> Console ready</p>
+    <p>> Loaded modules: UI, Auth, Storage</p>
+    <p>> Environment: Production</p>
+    <button onclick="toggleDevTools()">Close</button>
+</div>
+
 <script>
-const PASSCODE = "1234"; // 🔑 change this
+const PASSCODE = "1234"; // change this
 
-// SHOW HELLO FOREVER (even before login)
-const savedName = localStorage.getItem("ggui_username");
-if (savedName) {
-    document.getElementById("topbar").textContent = `Hello, ${savedName}`;
-}
-
-// PASSCODE CHECK
 function checkPasscode() {
-    const input = document.getElementById("passcode").value;
-    const error = document.getElementById("error");
-
-    if (input === PASSCODE) {
-        document.getElementById("lock").style.display = "none";
+    if (passcode.value === PASSCODE) {
+        lock.style.display = "none";
+        error.style.display = "none";
 
         if (localStorage.getItem("ggui_username")) {
-            showContent();
+            loginSuccess();
         } else {
-            document.getElementById("usernameScreen").style.display = "block";
+            usernameScreen.style.display = "block";
         }
     } else {
         error.style.display = "block";
     }
 }
 
-// SAVE USERNAME (FOREVER)
 function saveUsername() {
-    const name = document.getElementById("usernameInput").value.trim();
+    const name = usernameInput.value.trim();
     if (!name) return;
 
     localStorage.setItem("ggui_username", name);
-    document.getElementById("topbar").textContent = `Hello, ${name}`;
-    document.getElementById("usernameScreen").style.display = "none";
-    showContent();
+    usernameScreen.style.display = "none";
+    loginSuccess();
 }
 
-// SHOW MAIN CONTENT
-function showContent() {
-    document.getElementById("content").style.display = "block";
+function loginSuccess() {
+    const name = localStorage.getItem("ggui_username");
+    topbar.textContent = `Hello, ${name}`;
+    topbar.style.display = "block";
+    settings.style.display = "block";
+    content.style.display = "block";
 }
 
-// LOGOUT (DOES NOT REMOVE USERNAME)
 function logout() {
-    document.getElementById("content").style.display = "none";
-    document.getElementById("lock").style.display = "block";
-    document.getElementById("passcode").value = "";
+    content.style.display = "none";
+    settings.style.display = "none";
+    topbar.style.display = "none";
+    devtools.style.display = "none";
+    lock.style.display = "block";
+    passcode.value = "";
+}
+
+function changeUsername() {
+    content.style.display = "none";
+    usernameScreen.style.display = "block";
+}
+
+function toggleDevTools() {
+    devtools.style.display = devtools.style.display === "block" ? "none" : "block";
 }
 </script>
 
