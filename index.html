@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>G.GUI Dev Entry</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 :root {
     --bg: #0b0e14;
-    --panel: rgba(20,25,40,0.9);
+    --panel: rgba(18,22,35,0.92);
     --accent: #00e0ff;
-    --danger: #ff5c5c;
     --text: #e6e6e6;
+    --danger: #ff5c5c;
+    --glow: 0 0 12px rgba(0,224,255,0.25);
 }
 
 * {
@@ -24,10 +25,34 @@ body {
     height: 100vh;
     background: radial-gradient(circle at top, #121826, var(--bg));
     color: var(--text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
+}
+
+/* ---------- SIDEBAR ---------- */
+#sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 70px;
+    background: rgba(10,12,20,0.95);
+    border-right: 1px solid rgba(0,224,255,0.15);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+.sidebtn {
+    width: 46px;
+    height: 46px;
+    margin: 10px 0;
+    border-radius: 10px;
+    background: none;
+    border: 1px solid rgba(0,224,255,0.25);
+    color: var(--accent);
+    cursor: pointer;
+    box-shadow: var(--glow);
 }
 
 /* ---------- TOP BAR ---------- */
@@ -39,211 +64,225 @@ body {
     display: none;
 }
 
-/* ---------- SETTINGS BAR ---------- */
-#settings {
+/* ---------- PANELS ---------- */
+.panel {
     position: fixed;
-    top: 18px;
-    left: 30px;
+    left: 90px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: var(--panel);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    border: 1px solid rgba(0,224,255,0.25);
     display: none;
 }
 
-#settings button {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 6px 14px;
-    cursor: pointer;
-}
-
-/* ---------- PANELS ---------- */
-.panel {
-    background: var(--panel);
-    padding: 45px;
-    border-radius: 18px;
-    text-align: center;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    animation: fadeIn 0.6s ease;
-}
-
-.panel input {
-    margin-top: 15px;
-    padding: 12px;
-    width: 230px;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    text-align: center;
+.panel h3 {
+    margin-top: 0;
+    color: var(--accent);
 }
 
 .panel button {
-    margin-top: 18px;
-    padding: 10px 26px;
-    border-radius: 10px;
+    margin-top: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     background: var(--accent);
     color: black;
-    font-size: 16px;
 }
 
-#error {
-    margin-top: 12px;
-    color: var(--danger);
-    display: none;
-}
-
-/* ---------- MAIN CONTENT ---------- */
-#content {
-    display: none;
+/* ---------- LOCK SCREEN ---------- */
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: var(--panel);
-    padding: 55px 65px;
-    border-radius: 22px;
+    padding: 45px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+}
+
+.center input {
+    margin-top: 15px;
+    padding: 12px;
+    width: 220px;
+    border-radius: 10px;
+    border: none;
     text-align: center;
 }
 
+.center button {
+    margin-top: 18px;
+    padding: 10px 26px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+/* ---------- MAIN ---------- */
+#content {
+    display: none;
+    text-align: center;
+    margin-top: 40vh;
+}
+
 .logout {
-    margin-top: 30px;
     background: var(--danger);
     color: white;
     border: none;
-    padding: 10px 26px;
+    padding: 10px 24px;
     border-radius: 10px;
     cursor: pointer;
 }
 
-/* ---------- DEV TOOLS ---------- */
-#devtools {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    height: 220px;
-    background: rgba(10,12,20,0.95);
-    border: 1px solid var(--accent);
-    border-radius: 10px;
-    padding: 12px;
-    display: none;
-    font-size: 13px;
-}
-
-#devtools h3 {
-    margin-top: 0;
-    font-size: 14px;
+/* ---------- LIVE COUNTER ---------- */
+#counter {
+    font-size: 20px;
+    margin-top: 10px;
     color: var(--accent);
-}
-
-#devtools button {
-    background: none;
-    color: var(--accent);
-    border: none;
-    cursor: pointer;
-}
-
-/* ---------- ANIMATION ---------- */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- TOP UI -->
-<div id="settings">
-    <button onclick="changeUsername()">Change Username</button>
-    <button onclick="toggleDevTools()">Dev Tools</button>
+<!-- SIDEBAR -->
+<div id="sidebar">
+    <button class="sidebtn" onclick="toggleSettings()">⚙</button>
+    <button class="sidebtn" onclick="toggleDev()">🧰</button>
 </div>
 
+<!-- TOP BAR -->
 <div id="topbar"></div>
 
-<!-- 🔒 PASSCODE -->
-<div id="lock" class="panel">
-    <h1>G.GUI Dev Entry</h1>
-    <p>Enter Passcode</p>
-    <input type="password" id="passcode" placeholder="Passcode">
-    <br>
-    <button onclick="checkPasscode()">Enter</button>
-    <div id="error">Invalid passcode</div>
+<!-- SETTINGS PANEL -->
+<div id="settingsPanel" class="panel">
+    <h3>Settings</h3>
+    <button onclick="changeUsername()">Change Username</button>
 </div>
 
-<!-- 👤 USERNAME -->
-<div id="usernameScreen" class="panel" style="display:none;">
+<!-- DEV TOOLS PANEL -->
+<div id="devPanel" class="panel">
+    <h3>Dev Tools</h3>
+    <button onclick="showCounter()">Live Counter</button>
+    <div id="counter"></div>
+</div>
+
+<!-- LOCK -->
+<div id="lock" class="center">
+    <h1>G.GUI Dev Entry</h1>
+    <input type="password" id="passcode" placeholder="Passcode">
+    <br>
+    <button onclick="login()">Enter</button>
+</div>
+
+<!-- USERNAME -->
+<div id="usernameScreen" class="center" style="display:none;">
     <h1>Set Username</h1>
-    <input type="text" id="usernameInput" placeholder="Username">
+    <input id="usernameInput" placeholder="Username">
     <br>
     <button onclick="saveUsername()">Continue</button>
 </div>
 
-<!-- 🔓 MAIN -->
+<!-- MAIN -->
 <div id="content">
-    <h1>Developer Console</h1>
-    <p>Access level: Administrator</p>
+    <h1>Developer Access Granted</h1>
     <button class="logout" onclick="logout()">Logout</button>
 </div>
 
-<!-- 🧰 DEV TOOLS -->
-<div id="devtools">
-    <h3>Fake Dev Tools</h3>
-    <p>> Console ready</p>
-    <p>> Loaded modules: UI, Auth, Storage</p>
-    <p>> Environment: Production</p>
-    <button onclick="toggleDevTools()">Close</button>
-</div>
-
 <script>
-const PASSCODE = "1234"; // change this
+const PASSCODE = "1234";
 
-function checkPasscode() {
-    if (passcode.value === PASSCODE) {
-        lock.style.display = "none";
-        error.style.display = "none";
+/* ---------- AUTH ---------- */
+function login() {
+    if (passcode.value !== PASSCODE) return;
 
-        if (localStorage.getItem("ggui_username")) {
-            loginSuccess();
-        } else {
-            usernameScreen.style.display = "block";
-        }
+    lock.style.display = "none";
+
+    if (localStorage.getItem("ggui_user")) {
+        finishLogin();
     } else {
-        error.style.display = "block";
+        usernameScreen.style.display = "block";
     }
 }
 
 function saveUsername() {
-    const name = usernameInput.value.trim();
-    if (!name) return;
-
-    localStorage.setItem("ggui_username", name);
+    localStorage.setItem("ggui_user", usernameInput.value.trim());
     usernameScreen.style.display = "none";
-    loginSuccess();
+    finishLogin();
 }
 
-function loginSuccess() {
-    const name = localStorage.getItem("ggui_username");
+function finishLogin() {
+    const name = localStorage.getItem("ggui_user");
     topbar.textContent = `Hello, ${name}`;
     topbar.style.display = "block";
-    settings.style.display = "block";
+    sidebar.style.display = "flex";
     content.style.display = "block";
+    startPresence();
 }
 
 function logout() {
     content.style.display = "none";
-    settings.style.display = "none";
+    sidebar.style.display = "none";
     topbar.style.display = "none";
-    devtools.style.display = "none";
+    settingsPanel.style.display = "none";
+    devPanel.style.display = "none";
     lock.style.display = "block";
-    passcode.value = "";
+}
+
+/* ---------- SETTINGS ---------- */
+function toggleSettings() {
+    settingsPanel.style.display =
+        settingsPanel.style.display === "block" ? "none" : "block";
+    devPanel.style.display = "none";
 }
 
 function changeUsername() {
+    settingsPanel.style.display = "none";
     content.style.display = "none";
     usernameScreen.style.display = "block";
 }
 
-function toggleDevTools() {
-    devtools.style.display = devtools.style.display === "block" ? "none" : "block";
+/* ---------- DEV TOOLS ---------- */
+function toggleDev() {
+    devPanel.style.display =
+        devPanel.style.display === "block" ? "none" : "block";
+    settingsPanel.style.display = "none";
+}
+
+/* ---------- LIVE COUNTER (SIMULATED) ---------- */
+const ID = Math.random().toString(36).slice(2);
+
+function startPresence() {
+    setInterval(() => {
+        localStorage.setItem("ggui_online_" + ID, Date.now());
+        cleanup();
+    }, 2000);
+}
+
+function cleanup() {
+    const now = Date.now();
+    Object.keys(localStorage).forEach(k => {
+        if (k.startsWith("ggui_online_")) {
+            if (now - localStorage.getItem(k) > 5000) {
+                localStorage.removeItem(k);
+            }
+        }
+    });
+}
+
+function showCounter() {
+    setInterval(() => {
+        const count = Object.keys(localStorage)
+            .filter(k => k.startsWith("ggui_online_")).length;
+        counter.textContent = `Users online: ${count}`;
+    }, 1000);
 }
 </script>
 
