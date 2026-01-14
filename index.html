@@ -37,10 +37,9 @@ body {
     right: 30px;
     font-size: 14px;
     opacity: 0.9;
-    display: none;
 }
 
-/* ---------- LOCK / USERNAME SCREENS ---------- */
+/* ---------- PANELS ---------- */
 .panel {
     background: var(--panel);
     padding: 45px;
@@ -94,7 +93,6 @@ body {
     text-align: center;
     backdrop-filter: blur(12px);
     box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-    animation: fadeIn 0.6s ease;
 }
 
 .logout {
@@ -163,6 +161,13 @@ body {
 <script>
 const PASSCODE = "1234"; // 🔑 change this
 
+// SHOW HELLO FOREVER (even before login)
+const savedName = localStorage.getItem("ggui_username");
+if (savedName) {
+    document.getElementById("topbar").textContent = `Hello, ${savedName}`;
+}
+
+// PASSCODE CHECK
 function checkPasscode() {
     const input = document.getElementById("passcode").value;
     const error = document.getElementById("error");
@@ -180,25 +185,25 @@ function checkPasscode() {
     }
 }
 
+// SAVE USERNAME (FOREVER)
 function saveUsername() {
     const name = document.getElementById("usernameInput").value.trim();
     if (!name) return;
 
     localStorage.setItem("ggui_username", name);
+    document.getElementById("topbar").textContent = `Hello, ${name}`;
     document.getElementById("usernameScreen").style.display = "none";
     showContent();
 }
 
+// SHOW MAIN CONTENT
 function showContent() {
-    const name = localStorage.getItem("ggui_username");
-    document.getElementById("topbar").textContent = `Hello, ${name}`;
-    document.getElementById("topbar").style.display = "block";
     document.getElementById("content").style.display = "block";
 }
 
+// LOGOUT (DOES NOT REMOVE USERNAME)
 function logout() {
     document.getElementById("content").style.display = "none";
-    document.getElementById("topbar").style.display = "none";
     document.getElementById("lock").style.display = "block";
     document.getElementById("passcode").value = "";
 }
