@@ -7,180 +7,261 @@
 
 <style>
 :root{
---bg:#0b0e14;--panel:rgba(18,22,35,.92);--accent:#00e0ff;
---danger:#ff3b3b;--text:#e6e6e6;--glow:0 0 12px rgba(0,224,255,.25)
+--bg:#0b0f1a;
+--panel:rgba(18,24,40,.92);
+--accent:#00e6ff;
+--accent-soft:rgba(0,230,255,.25);
+--danger:#ff4b4b;
+--text:#e8f0ff;
+--glow:0 0 14px rgba(0,230,255,.35)
 }
 *{box-sizing:border-box;font-family:Segoe UI,Arial}
-body{margin:0;height:100vh;background:radial-gradient(circle at top,#121826,var(--bg));color:var(--text);overflow:hidden}
+body{
+margin:0;height:100vh;
+background:radial-gradient(circle at top,#141c2f,var(--bg));
+color:var(--text);overflow:hidden
+}
 
-/* SIDEBAR */
-#sidebar{position:fixed;left:0;top:0;height:100%;width:70px;background:#0a0c14;display:none;flex-direction:column;transition:.3s;overflow:hidden}
-#sidebar:hover{width:210px}
-.sidebtn{height:52px;margin:8px;border-radius:12px;background:#0a0c14;border:1px solid rgba(0,224,255,.25);color:var(--accent);
-display:flex;align-items:center;gap:12px;padding-left:14px;cursor:pointer;box-shadow:var(--glow)}
+/* ================= SIDEBAR ================= */
+#sidebar{
+position:fixed;left:0;top:0;height:100%;
+width:72px;background:rgba(10,14,26,.95);
+border-right:1px solid var(--accent-soft);
+display:none;flex-direction:column;
+padding-top:18px;transition:.35s;overflow:hidden
+}
+#sidebar:hover{width:220px}
+.sidebtn{
+height:54px;margin:8px;border-radius:14px;
+background:linear-gradient(145deg,#0c1222,#0a0f1c);
+border:1px solid var(--accent-soft);
+color:var(--accent);display:flex;
+align-items:center;gap:14px;padding-left:16px;
+cursor:pointer;box-shadow:var(--glow);
+transition:.25s
+}
+.sidebtn:hover{box-shadow:0 0 22px rgba(0,230,255,.55)}
 .sidebtn .icon{width:26px;text-align:center;font-size:18px}
-.sidebtn .label{opacity:0;white-space:nowrap}
+.sidebtn .label{opacity:0;white-space:nowrap;font-size:16px}
 #sidebar:hover .label{opacity:1}
 
-/* PANELS */
-.panel{position:fixed;left:90px;top:50%;transform:translateY(-50%);
-width:340px;background:var(--panel);padding:25px;border-radius:16px;display:none}
+/* ================= TOP BAR ================= */
+#topbar{
+position:fixed;top:20px;right:34px;
+font-size:15px;color:var(--accent)
+}
 
-/* BUTTONS */
-.btn{margin-top:10px;padding:10px 22px;border-radius:10px;border:none;cursor:pointer;
-background:var(--accent);color:black;box-shadow:var(--glow)}
-.btn.danger{background:var(--danger);color:white}
+/* ================= PANELS ================= */
+.panel{
+position:fixed;left:110px;top:50%;
+transform:translateY(-50%);
+width:360px;background:var(--panel);
+padding:28px;border-radius:18px;
+border:1px solid var(--accent-soft);
+box-shadow:0 0 40px rgba(0,0,0,.7);
+display:none
+}
+.panel h3{margin-top:0;color:var(--accent)}
 
-/* CENTER SCREENS */
-.center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-background:var(--panel);padding:45px;border-radius:18px;text-align:center}
-input,select{padding:12px;width:220px;border-radius:10px;border:none;margin-top:10px}
+/* ================= BUTTONS ================= */
+.btn{
+margin-top:12px;padding:12px 26px;
+border-radius:12px;border:none;
+background:var(--accent);color:black;
+font-size:15px;cursor:pointer;
+box-shadow:var(--glow);
+transition:.2s
+}
+.btn:hover{transform:scale(1.06)}
+.btn.danger{
+background:var(--danger);color:white;
+box-shadow:0 0 18px rgba(255,75,75,.5)
+}
 
-/* TOP BAR */
-#topbar{position:fixed;top:18px;right:30px;display:none}
+/* ================= CENTER SCREENS ================= */
+.center{
+position:absolute;top:50%;left:50%;
+transform:translate(-50%,-50%);
+background:var(--panel);padding:48px;
+border-radius:22px;text-align:center;
+box-shadow:0 0 50px rgba(0,0,0,.8)
+}
+input,select{
+padding:14px;width:240px;
+border-radius:12px;border:none;
+margin-top:14px;text-align:center;
+outline:none
+}
 
-/* DEV INFO */
-.info{margin-top:8px;font-size:14px}
+/* ================= INFO ================= */
+.info{margin-top:10px;font-size:14px;opacity:.9}
 
-/* BAN SCREEN */
-#banScreen{display:none;position:absolute;inset:0;background:black;
-color:red;font-size:30px;align-items:center;justify-content:center;flex-direction:column}
+/* ================= BAN OVERLAY ================= */
+#banScreen{
+display:none;position:absolute;inset:0;
+background:radial-gradient(circle,#200,#000);
+color:#ff6b6b;align-items:center;
+justify-content:center;flex-direction:column;
+font-size:28px;text-shadow:0 0 20px red
+}
 </style>
 </head>
 
 <body>
 
 <div id="banScreen">
-    <h1>BANNED</h1>
-    <div id="banTimer"></div>
+<h1>ACCESS TEMPORARILY REVOKED</h1>
+<div id="banTimer"></div>
 </div>
 
 <div id="sidebar">
-    <div class="sidebtn" onclick="toggleDev()"><span class="icon">🧰</span><span class="label">Dev Tools</span></div>
+<div class="sidebtn" onclick="toggleSettings()">
+<span class="icon">⚙</span><span class="label">Settings</span>
+</div>
+<div class="sidebtn" onclick="toggleDev()">
+<span class="icon">🧰</span><span class="label">Dev Tools</span>
+</div>
 </div>
 
 <div id="topbar"></div>
 
-<!-- DEV PANEL -->
+<!-- SETTINGS -->
+<div id="settingsPanel" class="panel">
+<h3>Settings</h3>
+<div class="info" id="rankInfo"></div>
+<button class="btn" onclick="changeUsername()">Change Username</button>
+</div>
+
+<!-- DEV TOOLS -->
 <div id="devPanel" class="panel">
-    <h3>Dev Tools</h3>
-    <div class="info" id="rankInfo"></div>
-    <div class="info" id="timeOnline"></div>
-    <div class="info" id="fps"></div>
-    <button class="btn" onclick="showCounter()">Live Counter</button>
-    <div class="info" id="counter"></div>
-    <button class="btn danger" onclick="banAll()" id="banBtn">Ban Everybody (10s)</button>
+<h3>Dev Tools</h3>
+<div class="info" id="timeOnline"></div>
+<div class="info" id="fps"></div>
+<div class="info" id="counter"></div>
+<button class="btn danger" id="banBtn" onclick="banOthers()">Ban Everybody (3s)</button>
+<div class="info" id="cooldownInfo"></div>
 </div>
 
 <!-- LOGIN -->
 <div id="lock" class="center">
-    <h1>G.GUI</h1>
-    <input id="passcode" placeholder="Passcode">
-    <button class="btn" onclick="login()">Enter</button>
+<h1>G.GUI Dev Entry</h1>
+<input id="passcode" placeholder="Passcode">
+<button class="btn" onclick="login()">Enter</button>
 </div>
 
 <!-- RANK -->
 <div id="rankScreen" class="center" style="display:none">
-    <h2>Select Rank</h2>
-    <select id="rankSelect">
-        <option>User</option>
-        <option>Admin</option>
-        <option>Boss</option>
-    </select>
-    <button class="btn" onclick="saveRank()">Continue</button>
+<h2>Select Rank</h2>
+<select id="rankSelect">
+<option>User</option>
+<option>Admin</option>
+<option>Boss</option>
+</select>
+<button class="btn" onclick="saveRank()">Continue</button>
 </div>
 
 <!-- USERNAME -->
 <div id="userScreen" class="center" style="display:none">
-    <h2>Username</h2>
-    <input id="username">
-    <button class="btn" onclick="saveUser()">Continue</button>
+<h2>Choose Username</h2>
+<input id="username">
+<button class="btn" onclick="saveUser()">Continue</button>
 </div>
 
 <script>
 const PASS="1234";
+const SESSION=Math.random().toString(36).slice(2);
 let startTime,fpsFrames=0,lastFPS=performance.now();
 
-/* LOGIN FLOW */
+/* ---------- LOGIN ---------- */
 function login(){
- if(passcode.value!==PASS)return;
- lock.style.display="none";
- if(!localStorage.rank)rankScreen.style.display="block";
- else if(!localStorage.user)userScreen.style.display="block";
- else finishLogin();
+if(passcode.value!==PASS)return;
+lock.style.display="none";
+if(!localStorage.rank)rankScreen.style.display="block";
+else if(!localStorage.user)userScreen.style.display="block";
+else finishLogin();
 }
 function saveRank(){
- localStorage.rank=rankSelect.value;
- rankScreen.style.display="none";
- userScreen.style.display="block";
+localStorage.rank=rankSelect.value;
+rankScreen.style.display="none";
+userScreen.style.display="block";
 }
 function saveUser(){
- if(!username.value.trim())return;
- localStorage.user=username.value.trim();
- userScreen.style.display="none";
- finishLogin();
+if(!username.value.trim())return;
+localStorage.user=username.value.trim();
+userScreen.style.display="none";
+finishLogin();
 }
 function finishLogin(){
- sidebar.style.display="flex";
- topbar.textContent=`Hello ${localStorage.user}`;
- topbar.style.display="block";
- rankInfo.textContent=`Rank: ${localStorage.rank}`;
- startTime=Date.now();
- if(localStorage.rank!=="Boss")banBtn.style.display="none";
+sidebar.style.display="flex";
+topbar.textContent=`Hello, ${localStorage.user}`;
+rankInfo.textContent=`Rank: ${localStorage.rank}`;
+settingsPanel.style.display="none";
+devPanel.style.display="none";
+startTime=Date.now();
+if(localStorage.rank!=="Boss")banBtn.style.display="none";
 }
 
-/* DEV TOOLS */
+/* ---------- PANELS ---------- */
+function toggleSettings(){
+settingsPanel.style.display=settingsPanel.style.display==="block"?"none":"block";
+devPanel.style.display="none";
+}
 function toggleDev(){
- devPanel.style.display=devPanel.style.display==="block"?"none":"block";
+devPanel.style.display=devPanel.style.display==="block"?"none":"block";
+settingsPanel.style.display="none";
+}
+function changeUsername(){
+settingsPanel.style.display="none";
+userScreen.style.display="block";
 }
 
-/* TIME ONLINE */
+/* ---------- TIME ONLINE ---------- */
 setInterval(()=>{
- if(startTime){
-   const s=Math.floor((Date.now()-startTime)/1000);
-   timeOnline.textContent=`Time Online: ${s}s`;
- }
+if(startTime){
+const s=Math.floor((Date.now()-startTime)/1000);
+timeOnline.textContent=`Time Online: ${s}s`;
+}
 },1000);
 
-/* REAL FPS */
+/* ---------- REAL FPS ---------- */
 function fpsLoop(){
- fpsFrames++;
- const now=performance.now();
- if(now-lastFPS>=1000){
-   fps.textContent=`FPS: ${fpsFrames}`;
-   fpsFrames=0;
-   lastFPS=now;
- }
- requestAnimationFrame(fpsLoop);
+fpsFrames++;
+const now=performance.now();
+if(now-lastFPS>=1000){
+fps.textContent=`FPS: ${fpsFrames}`;
+fpsFrames=0;lastFPS=now;
+}
+requestAnimationFrame(fpsLoop);
 }
 fpsLoop();
 
-/* LIVE COUNTER */
-function showCounter(){
- counter.textContent=`Users online: ${
-   Object.keys(localStorage).filter(k=>k.startsWith("ggui_online")).length
- }`;
-}
-
-/* PRESENCE */
-const id=Math.random();
+/* ---------- LIVE COUNTER ---------- */
 setInterval(()=>{
- localStorage["ggui_online"+id]=Date.now();
-},2000);
+localStorage["ggui_"+SESSION]=Date.now();
+const online=Object.keys(localStorage)
+.filter(k=>k.startsWith("ggui_") && Date.now()-localStorage[k]<5000).length;
+counter.textContent=`Users Online: ${online}`;
+},1000);
 
-/* BAN SYSTEM */
-function banAll(){
- if(localStorage.rank!=="Boss")return;
- const until=Date.now()+10000;
- localStorage.banUntil=until;
+/* ---------- BAN SYSTEM ---------- */
+function banOthers(){
+if(localStorage.rank!=="Boss")return;
+const cooldown=localStorage.banCooldown;
+if(cooldown && Date.now()<cooldown)return;
+localStorage.banUntil=Date.now()+3000;
+localStorage.banCooldown=Date.now()+86400000;
 }
 setInterval(()=>{
- if(localStorage.banUntil && Date.now()<localStorage.banUntil){
-   banScreen.style.display="flex";
-   banTimer.textContent=`${Math.ceil((localStorage.banUntil-Date.now())/1000)}s`;
- }else{
-   banScreen.style.display="none";
- }
+const until=localStorage.banUntil;
+if(until && Date.now()<until && localStorage.rank!=="Boss"){
+banScreen.style.display="flex";
+banTimer.textContent=`${Math.ceil((until-Date.now())/1000)}s`;
+}else banScreen.style.display="none";
+
+const cd=localStorage.banCooldown;
+if(cd && Date.now()<cd){
+cooldownInfo.textContent=`Cooldown: ${Math.ceil((cd-Date.now())/3600000)}h`;
+}else cooldownInfo.textContent="";
 },500);
 </script>
 
